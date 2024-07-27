@@ -1,9 +1,10 @@
 import { lazy } from 'react'
 
-const Login = lazy(() => import('../../pages/auth/Login'))
-const Register = lazy(() => import('../../pages/auth/Register'))
-const AdminLogin = lazy(() => import('../../pages/auth/AdminLogin'))
 const Home = lazy(() => import('../../pages/Home'))
+const SellerLogin = lazy(() => import('../../pages/auth/SellerLogin'))
+const SellerRegister = lazy(() => import('../../pages/auth/SellerRegister'))
+const AdminLogin = lazy(() => import('../../pages/auth/AdminLogin'))
+const Unauthorized = lazy(() => import('../../pages/Unauthorized'))
 
 const publicRoutes = [
     {
@@ -12,15 +13,19 @@ const publicRoutes = [
     },
     {
         path: '/login',
-        element: <Login />
+        element: <SellerLogin />
     },
     {
         path: '/register',
-        element: <Register />
+        element: <SellerRegister />
     },
     {
         path: '/admin/login',
         element: <AdminLogin />
+    },
+    {
+        path: '/unauthorized',
+        element: <Unauthorized />
     },
 ]
 

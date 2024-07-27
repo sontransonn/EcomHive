@@ -6,12 +6,19 @@ const api = axios.create({
     baseURL: 'http://localhost:5000/api'
 })
 
-const initialState = {
-    successMessage: '',
-    errorMessage: '',
-    loader: false,
-    userInfo: '',
-    token: localStorage.getItem('accessToken')
+const returnRole = (token) => {
+    if (token) {
+        const decodeToken = jwtDecode(token)
+        const expireTime = new Date(decodeToken.exp * 1000)
+        if (new Date() > expireTime) {
+            localStorage.removeItem('accessToken')
+            return ''
+        } else {
+            return decodeToken.role
+        }
+    } else {
+        return ''
+    }
 }
 
 export const admin_login = createAsyncThunk(
@@ -28,9 +35,57 @@ export const admin_login = createAsyncThunk(
     }
 )
 
+export const seller_login = createAsyncThunk(
+    'auth/seller_login',
+    async (info, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.post('/seller-login', info, { withCredentials: true })
+            localStorage.setItem('accessToken', data.token)
+
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const seller_register = createAsyncThunk(
+    'auth/seller_register',
+    async (info, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.post('/seller-register', info, { withCredentials: true })
+            localStorage.setItem('accessToken', data.token)
+
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const get_user_info = createAsyncThunk(
+    'auth/get_user_info',
+    async (_, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.get('/get-user', { withCredentials: true })
+
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 export const authSlice = createSlice({
     name: 'auth',
-    initialState,
+    initialState: {
+        successMessage: '',
+        errorMessage: '',
+        loader: false,
+        userInfo: '',
+        role: returnRole(localStorage.getItem('accessToken')),
+        token: localStorage.getItem('accessToken')
+    },
     reducers: {
         messageClear: (state, _) => {
             state.errorMessage = ""
@@ -50,6 +105,38 @@ export const authSlice = createSlice({
                 state.loader = false
                 state.successMessage = action.payload.message
                 state.token = action.payload.token
+                state.role = returnRole(action.payload.token)
+            })
+            .addCase(seller_login.pending, (state, action) => {
+                state.loader = true
+            })
+            .addCase(seller_login.rejected, (state, action) => {
+                state.loader = false
+                state.errorMessage = action.payload.error
+            })
+            .addCase(seller_login.fulfilled, (state, action) => {
+                state.loader = false
+                state.successMessage = action.payload.message
+                state.token = action.payload.token
+                state.role = returnRole(action.payload.token)
+            })
+            .addCase(seller_register.pending, (state, action) => {
+                state.loader = true
+            })
+            .addCase(seller_register.rejected, (state, action) => {
+                state.loader = false
+                state.errorMessage = action.payload.error
+            })
+            .addCase(seller_register.fulfilled, (state, action) => {
+                state.loader = false
+                state.successMessage = action.payload.message
+                state.token = action.payload.token
+                state.role = returnRole(action.payload.token)
+            })
+            .addCase(get_user_info.fulfilled, (state, action) => {
+                state.loader = false
+                state.userInfo = action.payload.userInfo
+                state.role = action.payload.userInfo.role
             })
     }
 })

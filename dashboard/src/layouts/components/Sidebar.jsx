@@ -18,7 +18,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
     const { role } = useSelector(state => state.auth)
 
     useEffect(() => {
-        const navs = getNavs("seller")
+        const navs = getNavs(role)
 
         setAllNav(navs)
     }, [role])

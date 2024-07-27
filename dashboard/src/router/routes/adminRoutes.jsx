@@ -48,7 +48,7 @@ const adminRoutes = [
         role: 'admin'
     },
     {
-        path: 'admin/dashboard/sellers/details/:sellerId',
+        path: 'admin/dashboard/seller/details/:sellerId',
         element: <SellerDetails />,
         role: 'admin'
     },
@@ -58,10 +58,15 @@ const adminRoutes = [
         role: 'admin'
     },
     {
+        path: 'admin/dashboard/chat-sellers/:sellerId',
+        element: <ChatSeller />,
+        role: 'admin'
+    },
+    {
         path: 'admin/dashboard/order/details/:orderId',
         element: <OrderDetails />,
         role: 'admin'
-    },
+    }
 ]
 
 export default adminRoutes

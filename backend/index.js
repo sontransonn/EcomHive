@@ -6,7 +6,8 @@ import cookieParser from "cookie-parser"
 import "./configs/dotenvConfig.js"
 import corsConfig from './configs/corsConfig.js';
 
-import authRoute from "./routes/authRoute.js"
+import authRoutes from "./routes/authRoutes.js"
+import categoryRoutes from "./routes/dashboard/categoryRoutes.js"
 
 import { connectDB } from "./services/dbService.js";
 
@@ -18,7 +19,9 @@ app.use(corsConfig)
 app.use(bodyParser.json())
 app.use(cookieParser())
 
-app.use("/api", authRoute)
+app.use("/api", authRoutes)
+
+app.use("/api", categoryRoutes)
 
 app.listen(PORT, () => {
     connectDB()

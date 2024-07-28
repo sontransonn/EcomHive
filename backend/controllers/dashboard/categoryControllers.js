@@ -55,5 +55,48 @@ export const add_category = async (req, res) => {
 }
 
 export const get_category = async (req, res) => {
+    try {
+        const { page, searchValue, parPage } = req.query
 
+        let skipPage = ''
+        if (parPage && page) {
+            skipPage = parseInt(parPage) * (parseInt(page) - 1)
+        }
+
+        if (searchValue && page && parPage) {
+            const categories = await CATEGORIES.find({
+                $text: { $search: searchValue }
+            }).skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+
+            const totalCategory = await CATEGORIES.find({
+                $text: { $search: searchValue }
+            }).countDocuments()
+
+            return res.status(200).json({
+                totalCategory,
+                categories
+            })
+        } else if (searchValue === '' && page && parPage) {
+            const categories = await CATEGORIES.find({}).skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+
+            const totalCategory = await CATEGORIES.find({}).countDocuments()
+
+            return res.status(200).json({
+                totalCategory,
+                categories
+            })
+        } else {
+            const categories = await CATEGORIES.find({}).sort({ createdAt: -1 })
+
+            const totalCategory = await CATEGORIES.find({}).countDocuments()
+
+            return res.status(200).json({
+                totalCategory,
+                categories
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error })
+    }
 }

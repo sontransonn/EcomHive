@@ -24,6 +24,19 @@ export const categoryAdd = createAsyncThunk(
     }
 )
 
+export const get_category = createAsyncThunk(
+    'category/get_category',
+    async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.get(`/category-get?page=${page}&&searchValue=${searchValue}&&parPage=${parPage}`, { withCredentials: true })
+
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 export const categorySlice = createSlice({
     name: 'category',
     initialState: {
@@ -52,6 +65,10 @@ export const categorySlice = createSlice({
                 state.loader = false
                 state.successMessage = action.payload.message
                 state.categories = [...state.categories, action.payload.category]
+            })
+            .addCase(get_category.fulfilled, (state, action) => {
+                state.totalCategory = action.payload.totalCategory
+                state.categories = action.payload.categories
             })
     }
 })

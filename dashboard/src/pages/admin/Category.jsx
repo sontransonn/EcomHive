@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import { PropagateLoader } from 'react-spinners'
 
 import {
     messageClear,
-    categoryAdd
+    categoryAdd,
+    get_category
 } from "../../redux/slices/categorySlice"
 
 import { FaEdit, FaTrash } from 'react-icons/fa'
@@ -27,6 +29,39 @@ const Category = () => {
         name: '',
         image: ''
     })
+
+    const {
+        loader,
+        successMessage,
+        errorMessage,
+        categories
+    } = useSelector(state => state.category)
+
+    useEffect(() => {
+        if (errorMessage) {
+            toast.error(errorMessage)
+            dispatch(messageClear())
+        }
+        if (successMessage) {
+            toast.success(successMessage)
+            dispatch(messageClear())
+            setState({
+                name: '',
+                image: ''
+            })
+            setImageShow('')
+        }
+    }, [successMessage, errorMessage])
+
+    useEffect(() => {
+        const obj = {
+            parPage: parseInt(parPage),
+            page: parseInt(currentPage),
+            searchValue
+        }
+
+        dispatch(get_category(obj))
+    }, [searchValue, currentPage, parPage])
 
     const imageHandle = (e) => {
         let files = e.target.files
@@ -76,9 +111,9 @@ const Category = () => {
                                         <th scope='col' className='py-3 px-4'>Action</th>
                                     </tr>
                                 </thead>
-                                {/* <tbody>
+                                <tbody>
                                     {
-                                        categorys.map((d, i) => <tr key={i}>
+                                        categories.map((d, i) => <tr key={i}>
                                             <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>{i + 1}</td>
                                             <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>
                                                 <img className='w-[45px] h-[45px]' src={d.image} alt="" />
@@ -94,7 +129,7 @@ const Category = () => {
                                             </td>
                                         </tr>)
                                     }
-                                </tbody> */}
+                                </tbody>
                             </table>
                         </div>
                         <div className='w-full flex justify-end mt-4 bottom-4 right-4'>
@@ -159,13 +194,22 @@ const Category = () => {
                                 />
 
                                 <div className='mt-4'>
-                                    <button
-                                        className='bg-blue-500 w-full hover:shadow-blue-500/20 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'
-                                    >
-                                        {/* {
-                                            loader ? <PropagateLoader color='#fff' cssOverride={overrideStyle} /> : 'Add Category'
-                                        } */}
-                                        Add
+                                    <button disabled={loader ? true : false} className='bg-blue-500 w-full hover:shadow-blue-500/20 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3'>
+                                        {
+                                            loader ?
+                                                (
+                                                    <PropagateLoader
+                                                        color='#fff'
+                                                        cssOverride={{
+                                                            display: 'flex',
+                                                            margin: '0 auto',
+                                                            height: '24px',
+                                                            justifyContent: 'center',
+                                                            alignItems: "center"
+                                                        }}
+                                                    />
+                                                ) : 'Add Category'
+                                        }
                                     </button>
                                 </div>
                             </form>

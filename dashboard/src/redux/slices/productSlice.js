@@ -18,19 +18,6 @@ export const add_product = createAsyncThunk(
     }
 )
 
-export const update_product = createAsyncThunk(
-    'product/updateProduct',
-    async (product, { rejectWithValue, fulfillWithValue }) => {
-        try {
-            const { data } = await api.post('/product-update', product, { withCredentials: true })
-
-            return fulfillWithValue(data)
-        } catch (error) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
 export const get_products = createAsyncThunk(
     'product/get_products',
     async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
@@ -49,6 +36,19 @@ export const get_product = createAsyncThunk(
     async (productId, { rejectWithValue, fulfillWithValue }) => {
         try {
             const { data } = await api.get(`/product-get/${productId}`, { withCredentials: true })
+
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+export const update_product = createAsyncThunk(
+    'product/updateProduct',
+    async (product, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.post('/product-update', product, { withCredentials: true })
 
             return fulfillWithValue(data)
         } catch (error) {
@@ -97,30 +97,37 @@ export const productSlice = createSlice({
             .addCase(add_product.pending, (state, action) => {
                 state.loader = true
             })
-        // .addCase(add_product.rejected, (state, action) => {
-
-        // })
-        // .addCase(add_product.fulfilled, (state, action) => {
-
-        // })
-        // .addCase(get_products.fulfilled, (state, action) => {
-
-        // })
-        // .addCase(get_product.fulfilled, (state, action) => {
-
-        // })
-        // .addCase(update_product.pending, (state, action) => {
-
-        // })
-        // .addCase(update_product.rejected, (state, action) => {
-
-        // })
-        // .addCase(update_product.fulfilled, (state, action) => {
-
-        // })
-        // .addCase(product_image_update, (state, action) => {
-
-        // })
+            .addCase(add_product.rejected, (state, action) => {
+                state.loader = false
+                state.errorMessage = action.payload.error
+            })
+            .addCase(add_product.fulfilled, (state, action) => {
+                state.loader = false
+                state.successMessage = action.payload.message
+            })
+            .addCase(get_products.fulfilled, (state, action) => {
+                state.totalProduct = action.payload.totalProduct
+                state.products = action.payload.products
+            })
+            .addCase(get_product.fulfilled, (state, action) => {
+                state.product = action.payload.product
+            })
+            .addCase(update_product.pending, (state, action) => {
+                state.loader = true
+            })
+            .addCase(update_product.rejected, (state, action) => {
+                state.loader = false
+                state.errorMessage = action.payload.error
+            })
+            .addCase(update_product.fulfilled, (state, action) => {
+                state.loader = false
+                state.product = action.payload.product
+                state.successMessage = action.payload.message
+            })
+            .addCase(product_image_update.fulfilled, (state, action) => {
+                state.product = action.payload.product
+                state.successMessage = action.payload.message
+            })
     }
 })
 

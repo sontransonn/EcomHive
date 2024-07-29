@@ -16,36 +16,27 @@ export const add_category = async (req, res) => {
             let { name } = fields
             let { image } = files
 
-            if (Array.isArray(name)) {
-                name = name[0];
-            }
-            if (Array.isArray(image)) {
-                image = image[0];
-            }
+            name = Array.isArray(name) ? name[0] : name;
+            image = Array.isArray(image) ? image[0] : image;
 
             name = name.trim()
             const slug = name.split(' ').join('-')
 
-            try {
-                const result = await cloudinary.uploader.upload(image.filepath, { folder: 'categories' })
+            const result = await cloudinary.uploader.upload(image.filepath, { folder: 'categories' })
 
-                if (result) {
-                    const category = await CATEGORIES.create({
-                        name,
-                        slug,
-                        image: result.url
-                    })
+            if (result) {
+                const category = await CATEGORIES.create({
+                    name,
+                    slug,
+                    image: result.url
+                })
 
-                    res.status(201).json({
-                        category,
-                        message: 'category add success'
-                    })
-                } else {
-                    res.status(400).json({ error: 'Image upload failed' })
-                }
-            } catch (error) {
-                console.log(error);
-                res.status(500).json({ error: error })
+                res.status(201).json({
+                    category,
+                    message: 'category add success'
+                })
+            } else {
+                res.status(400).json({ error: 'Image upload failed' })
             }
         })
     } catch (error) {

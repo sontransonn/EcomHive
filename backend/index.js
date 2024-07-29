@@ -9,6 +9,7 @@ import corsConfig from './configs/corsConfig.js';
 import authRoutes from "./routes/authRoutes.js"
 import categoryRoutes from "./routes/dashboard/categoryRoutes.js"
 import productRoutes from "./routes/dashboard/productRoutes.js"
+import sellerRoutes from "./routes/dashboard/sellerRoutes.js"
 
 import { connectDB } from "./services/dbService.js";
 
@@ -24,6 +25,7 @@ app.use("/api", authRoutes)
 
 app.use("/api", categoryRoutes)
 app.use("/api", productRoutes)
+app.use("/api", sellerRoutes)
 
 app.listen(PORT, () => {
     connectDB()

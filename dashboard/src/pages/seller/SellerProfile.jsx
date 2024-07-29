@@ -5,7 +5,9 @@ import { PropagateLoader } from 'react-spinners'
 import { FadeLoader } from 'react-spinners'
 
 import {
-    messageClear
+    messageClear,
+    profile_image_upload,
+    profile_info_add
 } from "../../redux/slices/authSlice"
 
 import { BsImages } from 'react-icons/bs'
@@ -41,12 +43,19 @@ const SellerProfile = () => {
     }
 
     const add_image = (e) => {
-        e.preventDefault()
-        dispatch(profile_info_add(state))
+        if (e.target.files.length > 0) {
+            const formData = new FormData()
+
+            formData.append('image', e.target.files[0])
+
+            dispatch(profile_image_upload(formData))
+        }
     }
 
     const add = (e) => {
+        e.preventDefault()
 
+        dispatch(profile_info_add(state))
     }
 
     return (
@@ -119,9 +128,20 @@ const SellerProfile = () => {
                                     <span>Payment Account : </span>
                                     <p>
                                         {
-                                            userInfo.payment === 'active' ? <span className='bg-red-500 text-white text-xs cursor-pointer font-normal ml-2 px-2 py-0.5 rounded '>{userInfo.payment}</span> : <span onClick={() => dispatch(create_stripe_connect_account())} className='bg-blue-500 text-white text-xs cursor-pointer font-normal ml-2 px-2 py-0.5 rounded '>
-                                                click active
-                                            </span>
+                                            userInfo.payment === 'active' ?
+                                                (
+                                                    <span className='bg-red-500 text-white text-xs cursor-pointer font-normal ml-2 px-2 py-0.5 rounded '
+                                                    >
+                                                        {userInfo.payment}
+                                                    </span>
+                                                ) : (
+                                                    <span
+                                                        onClick={() => dispatch(create_stripe_connect_account())}
+                                                        className='bg-blue-500 text-white text-xs cursor-pointer font-normal ml-2 px-2 py-0.5 rounded '
+                                                    >
+                                                        click active
+                                                    </span>
+                                                )
                                         }
                                     </p>
                                 </div>

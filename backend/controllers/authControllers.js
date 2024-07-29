@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt"
 import formidable from "formidable"
 
+import cloudinary from "../configs/cloudinaryConfig.js"
+
 import ADMINS from "../models/adminsModel.js";
 import SELLERS from "../models/sellersModel.js";
 import SELLER_CUSTOMERS from "../models/chat/sellerCustomerModel.js";
@@ -145,9 +147,69 @@ export const seller_login = async (req, res) => {
 }
 
 export const profile_image_upload = async (req, res) => {
+    try {
+        const { id } = req
+        const form = formidable({ multiples: true })
 
+        form.parse(req, async (err, _, files) => {
+            if (err) {
+                return res.status(400).json({ error: 'something error' })
+            }
+
+            let { image } = files
+            image = Array.isArray(image) ? image[0] : image;
+
+            const result = await cloudinary.uploader.upload(image.filepath, { folder: 'profile' })
+
+            if (result) {
+                await SELLERS.findByIdAndUpdate(id, {
+                    image: result.url
+                })
+
+                const userInfo = await SELLERS.findById(id)
+
+                res.status(201).json({
+                    message: 'image upload success',
+                    userInfo
+                })
+            } else {
+                res.status(400).json({
+                    error: 'image upload failed'
+                })
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error })
+    }
 }
 
 export const profile_info_add = async (req, res) => {
+    try {
+        const { id } = req;
+        const {
+            division,
+            district,
+            shopName, sub_district
+        } = req.body;
 
+        await SELLERS.findByIdAndUpdate(id, {
+            shopInfo: {
+                shopName,
+                division,
+                district,
+                sub_district
+            }
+        })
+
+        const userInfo = await SELLERS.findById(id)
+
+        res.status(200).json({
+            message: 'Profile info add success',
+            userInfo
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error })
+    }
 }

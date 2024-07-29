@@ -17,7 +17,7 @@ router.post('/admin-login', admin_login)
 router.get('/get-user', authGuard, getUser)
 router.post('/seller-register', seller_register)
 router.post('/seller-login', seller_login)
-router.post('/profile-image-upload', profile_image_upload)
-router.post('/profile-info-add', profile_info_add)
+router.post('/profile-image-upload', authGuard, profile_image_upload)
+router.post('/profile-info-add', authGuard, profile_info_add)
 
 export default router

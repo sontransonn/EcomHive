@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
+import {
+    get_seller_request
+} from "../../redux/slices/sellerSlice"
+
 import { FaEye } from 'react-icons/fa'
 
 import Search from "../../components/Search"
@@ -14,6 +18,20 @@ const SellerRequest = () => {
     const [searchValue, setSearchValue] = useState('')
     const [parPage, setParPage] = useState(5)
     const [show, setShow] = useState(false)
+
+    const {
+        sellers,
+        totalSeller
+    } = useSelector(state => state.seller)
+
+    useEffect(() => {
+        dispatch(get_seller_request({
+            parPage,
+            searchValue,
+            page: currentPage
+        }))
+    }, [parPage, searchValue, currentPage])
+
     return (
         <div className='px-2 lg:px-7 pt-5'>
             <div className='w-full p-4  bg-[#283046] rounded-md'>
@@ -36,44 +54,47 @@ const SellerRequest = () => {
                             </tr>
                         </thead>
 
-                        {/* <tbody className='text-sm font-normal'>
+                        <tbody className='text-sm font-normal'>
                             {
-                                sellers.map((d, i) => <tr className='border-b border-slate-700' key={i}>
-                                    <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>{i + 1}</td>
-                                    <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>
-                                        <span>{d.name}</span>
-                                    </td>
-                                    <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>
-                                        <span>{d.email}</span>
-                                    </td>
-                                    <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>
-                                        <span>{d.payment}</span>
-                                    </td>
-                                    <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>
-                                        <span>{d.status}</span>
-                                    </td>
-                                    <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>
-                                        <div className='flex justify-start items-center gap-4'>
-                                            <Link to={`/admin/dashboard/seller/details/${d._id}`} className='p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50'><FaEye /></Link>
-                                        </div>
-                                    </td>
-                                </tr>)
+                                sellers.map((d, i) => (
+                                    <tr className='border-b border-slate-700' key={i}>
+                                        <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>{i + 1}</td>
+                                        <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>
+                                            <span>{d.name}</span>
+                                        </td>
+                                        <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>
+                                            <span>{d.email}</span>
+                                        </td>
+                                        <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>
+                                            <span>{d.payment}</span>
+                                        </td>
+                                        <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>
+                                            <span>{d.status}</span>
+                                        </td>
+                                        <td scope='row' className='py-2 px-4 font-normal whitespace-nowrap'>
+                                            <div className='flex justify-start items-center gap-4'>
+                                                <Link to={`/admin/dashboard/seller/details/${d._id}`} className='p-[6px] bg-green-500 rounded hover:shadow-lg hover:shadow-green-500/50'><FaEye /></Link>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
                             }
-                        </tbody> */}
+                        </tbody>
                     </table>
                 </div>
-
-                {/* {
-                    totalSeller <= parPage ? "" : <div className='w-full flex justify-end mt-4 bottom-4 right-4'>
-                        <Pagination
-                            pageNumber={currentPage}
-                            setPageNumber={setCurrentPage}
-                            totalItem={50}
-                            parPage={parPage}
-                            showItem={4}
-                        />
-                    </div>
-                } */}
+                {
+                    totalSeller <= parPage ? "" : (
+                        <div className='w-full flex justify-end mt-4 bottom-4 right-4'>
+                            <Pagination
+                                pageNumber={currentPage}
+                                setPageNumber={setCurrentPage}
+                                totalItem={50}
+                                parPage={parPage}
+                                showItem={4}
+                            />
+                        </div>
+                    )
+                }
             </div>
         </div>
     )

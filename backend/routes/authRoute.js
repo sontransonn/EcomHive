@@ -7,9 +7,9 @@ import {
     seller_login,
     profile_image_upload,
     profile_info_add
-} from "../controllers/authControllers.js"
+} from "../controllers/authController.js"
 
-import { authGuard } from "../middlewares/authMiddlewares.js";
+import { authGuard } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 

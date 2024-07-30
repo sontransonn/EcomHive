@@ -6,9 +6,9 @@ import {
     product_get,
     product_update,
     product_image_update
-} from "../../controllers/dashboard/productControllers.js"
+} from "../../controllers/dashboard/productController.js"
 
-import { authGuard } from "../../middlewares/authMiddlewares.js";
+import { authGuard } from "../../middlewares/authMiddleware.js";
 
 const router = express.Router();
 

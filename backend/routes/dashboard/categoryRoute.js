@@ -3,9 +3,9 @@ import express from "express"
 import {
     add_category,
     get_category
-} from "../../controllers/dashboard/categoryControllers.js"
+} from "../../controllers/dashboard/categoryController.js"
 
-import { authGuard } from "../../middlewares/authMiddlewares.js";
+import { authGuard } from "../../middlewares/authMiddleware.js";
 
 const router = express.Router();
 

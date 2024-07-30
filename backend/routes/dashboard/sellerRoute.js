@@ -6,9 +6,9 @@ import {
     get_deactive_sellers,
     get_seller,
     seller_status_update
-} from "../../controllers/dashboard/sellerControllers.js"
+} from "../../controllers/dashboard/sellerController.js"
 
-import { authGuard } from "../../middlewares/authMiddlewares.js"
+import { authGuard } from "../../middlewares/authMiddleware.js"
 
 const router = express.Router();
 

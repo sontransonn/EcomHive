@@ -9,7 +9,7 @@ import { AiOutlineGoogle } from 'react-icons/ai'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 
-const Login = () => {
+const LoginPage = () => {
     const navigate = useNavigate()
 
     const [state, setState] = useState({
@@ -121,4 +121,4 @@ const Login = () => {
     )
 }
 
-export default Login
+export default LoginPage

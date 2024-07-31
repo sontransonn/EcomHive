@@ -25,6 +25,7 @@ export const get_products = createAsyncThunk(
         try {
             const { data } = await api.get('/home/get-products')
 
+            console.log(data);
             return fulfillWithValue(data)
         } catch (error) {
             console.log(error.response)
@@ -51,13 +52,10 @@ export const get_product = createAsyncThunk(
 
 export const price_range_product = createAsyncThunk(
     'product/price_range_product',
-    async (_, {
-        fulfillWithValue
-    }) => {
+    async (_, { fulfillWithValue }) => {
         try {
-            const {
-                data
-            } = await api.get('/home/price-range-latest-product')
+            const { data } = await api.get('/home/price-range-latest-product')
+
             return fulfillWithValue(data)
         } catch (error) {
             console.log(error.response)
@@ -83,13 +81,10 @@ export const get_banners = createAsyncThunk(
 
 export const query_products = createAsyncThunk(
     'product/query_products',
-    async (query, {
-        fulfillWithValue
-    }) => {
+    async (query, { fulfillWithValue }) => {
         try {
-            const {
-                data
-            } = await api.get(`/home/query-products?category=${query.category}&&rating=${query.rating}&&lowPrice=${query.low}&&highPrice=${query.high}&&sortPrice=${query.sortPrice}&&pageNumber=${query.pageNumber}&&searchValue=${query.searchValue ? query.searchValue : ''}`)
+            const { data } = await api.get(`/home/query-products?category=${query.category}&&rating=${query.rating}&&lowPrice=${query.low}&&highPrice=${query.high}&&sortPrice=${query.sortPrice}&&pageNumber=${query.pageNumber}&&searchValue=${query.searchValue ? query.searchValue : ''}`)
+
             return fulfillWithValue(data)
         } catch (error) {
             console.log(error.response)
@@ -169,26 +164,26 @@ export const homeSlice = createSlice({
             .addCase(get_category.fulfilled, (state, action) => {
                 state.categories = action.payload.categories;
             })
-        // .addCase(getProducts.fulfilled, (state, action) => {
-        //     state.products = action.payload.products;
-        //     state.latest_product = action.payload.latest_product;
-        //     state.topRated_product = action.payload.topRated_product;
-        //     state.discount_product = action.payload.discount_product;
-        // })
-        // .addCase(getProduct.fulfilled, (state, action) => {
-        //     state.product = action.payload.product;
-        //     state.relatedProducts = action.payload.relatedProducts;
-        //     state.moreProducts = action.payload.moreProducts;
-        // })
-        // .addCase(priceRangeProduct.fulfilled, (state, action) => {
-        //     state.latest_product = action.payload.latest_product;
-        //     state.priceRange = action.payload.priceRange;
-        // })
-        // .addCase(queryProducts.fulfilled, (state, action) => {
-        //     state.products = action.payload.products;
-        //     state.totalProduct = action.payload.totalProduct;
-        //     state.parPage = action.payload.parPage;
-        // })
+            .addCase(get_products.fulfilled, (state, action) => {
+                state.products = action.payload.products;
+                state.latest_products = action.payload.latest_products;
+                state.topRated_products = action.payload.topRated_products;
+                state.discount_products = action.payload.discount_products;
+            })
+            // .addCase(getProduct.fulfilled, (state, action) => {
+            //     state.product = action.payload.product;
+            //     state.relatedProducts = action.payload.relatedProducts;
+            //     state.moreProducts = action.payload.moreProducts;
+            // })
+            .addCase(price_range_product.fulfilled, (state, action) => {
+                state.latest_products = action.payload.latest_product;
+                state.priceRange = action.payload.priceRange;
+            })
+            .addCase(query_products.fulfilled, (state, action) => {
+                state.products = action.payload.products;
+                state.totalProduct = action.payload.totalProduct;
+                state.parPage = action.payload.parPage;
+            })
         // .addCase(customerReview.fulfilled, (state, action) => {
         //     state.successMessage = action.payload.message;
         // })

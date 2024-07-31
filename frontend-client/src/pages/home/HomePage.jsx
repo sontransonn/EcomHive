@@ -13,7 +13,7 @@ import FeatureProducts from './components/FeatureProducts'
 import Products from './components/Products'
 import Footer from '../../components/Footer'
 
-const Home = () => {
+const HomePage = () => {
     const dispatch = useDispatch()
 
     const {
@@ -28,15 +28,12 @@ const Home = () => {
     }, [])
 
     return (
-        <div className='w-full'>
+        <div className='w-full flex flex-col gap-8 '>
             <Header />
             <Banner />
-            <div className='my-4'>
-                <Categories />
-            </div>
-            <div className='py-[45px]'>
-                <FeatureProducts products={products} />
-            </div>
+            <Categories />
+
+            <FeatureProducts products={products} />
 
             <div className='py-10'>
                 <div className='w-[85%] flex flex-wrap mx-auto'>
@@ -59,4 +56,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default HomePage

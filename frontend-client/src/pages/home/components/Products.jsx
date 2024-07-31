@@ -23,23 +23,22 @@ const responsive = {
     }
 }
 
-const ButtonGroup = ({ next, previous }) => {
-    return (
-        <div className='flex justify-between items-center'>
-            <div className='text-xl font-bold text-slate-600'>vsvs</div>
-            <div className='flex justify-center items-center gap-3 text-slate-600'>
-                <button onClick={() => previous()} className='w-[30px] h-[30px] flex justify-center items-center bg-slate-300 border border-slate-200'>
-                    <span><FiChevronLeft /></span>
-                </button>
-                <button onClick={() => next()} className='w-[30px] h-[30px] flex justify-center items-center bg-slate-300 border border-slate-200'>
-                    <span><FiChevronRight /></span>
-                </button>
-            </div>
-        </div>
-    )
-}
-
 const Products = ({ title, products }) => {
+    const ButtonGroup = ({ next, previous }) => {
+        return (
+            <div className='flex justify-between items-center'>
+                <div className='text-xl font-bold text-slate-600'>{title}</div>
+                <div className='flex justify-center items-center gap-3 text-slate-600'>
+                    <button onClick={() => previous()} className='w-[30px] h-[30px] flex justify-center items-center bg-slate-300 border border-slate-200'>
+                        <span><FiChevronLeft /></span>
+                    </button>
+                    <button onClick={() => next()} className='w-[30px] h-[30px] flex justify-center items-center bg-slate-300 border border-slate-200'>
+                        <span><FiChevronRight /></span>
+                    </button>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className='flex gap-8 flex-col-reverse'>
@@ -54,21 +53,24 @@ const Products = ({ title, products }) => {
 
             >
                 {
-                    [1, 2, 3, 4, 5, 6, 7].map((p, i) => {
+                    products.map((p, i) => {
                         return (
                             <div key={i} className='flex flex-col justify-start gap-2'>
-                                <Link className='flex justify-start items-start' to='#'>
-                                    <img
-                                        className='w-[110px] h-[110px]'
-                                        src={`http://localhost:5173/images/products/${p}.webp`}
-                                        alt="images"
-                                    />
-
-                                    <div className='px-3 flex justify-start items-start gap-1 flex-col text-slate-600'>
-                                        <h2>svssv</h2>
-                                        <span className='text-lg font-bold'>$210</span>
-                                    </div>
-                                </Link>
+                                {
+                                    p.map((pl, j) => (
+                                        <Link key={j} className='flex justify-start items-start' to='#'>
+                                            <img
+                                                className='w-[110px] h-[110px]'
+                                                src={pl.images[0]}
+                                                alt="images"
+                                            />
+                                            <div className='px-3 flex justify-start items-start gap-1 flex-col text-slate-600'>
+                                                <h2>{pl.name}</h2>
+                                                <span className='text-lg font-bold'>${pl.price}</span>
+                                            </div>
+                                        </Link>
+                                    ))
+                                }
                             </div>
                         )
                     })

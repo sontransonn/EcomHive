@@ -1,22 +1,38 @@
 import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux';
 import {
   Routes,
   Route
 } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 
-import Home from './pages/home/Home'
-import Shop from './pages/shop/Shop'
-import Register from './pages/register/Register'
-import Login from './pages/login/Login'
+import {
+  get_category
+} from "./redux/slices/homeSlice"
+
+import HomePage from './pages/home/HomePage'
+import ShopPage from './pages/shop/ShopPage'
+import RegisterPage from './pages/register/RegisterPage'
+import LoginPage from './pages/login/LoginPage'
 
 const App = () => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(get_category())
+  }, [])
+
   return (
-    <Routes>
-      <Route path='/' element={<Home />} />
-      <Route path='/shop' element={<Shop />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/login' element={<Login />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/shop' element={<ShopPage />} />
+        <Route path='/register' element={<RegisterPage />} />
+        <Route path='/login' element={<LoginPage />} />
+      </Routes>
+
+      <Toaster position='top-right' />
+    </>
   )
 }
 

@@ -9,7 +9,7 @@ import { AiOutlineGoogle } from 'react-icons/ai'
 import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 
-const Register = () => {
+const RegisterPage = () => {
     const navigate = useNavigate()
 
     const [state, setState] = useState({
@@ -132,4 +132,4 @@ const Register = () => {
     )
 }
 
-export default Register
+export default RegisterPage

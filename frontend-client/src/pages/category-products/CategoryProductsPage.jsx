@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Range } from 'react-range'
 
 import {
@@ -14,27 +14,29 @@ import { CiStar } from 'react-icons/ci'
 import { BsFillGridFill } from 'react-icons/bs'
 import { FaThList } from 'react-icons/fa'
 
-import MainLayout from '../../layouts/MainLayout'
+import MainLayout from "../../layouts/MainLayout"
+import ShopProducts from "../shop/components/ShopProducts"
 import Products from "../../components/Products"
-import ShopProducts from './components/ShopProducts'
-import Pagination from '../../components/Pagination'
+import Pagination from "../../components/Pagination"
 
-const ShopPage = () => {
+const CategoryProductsPage = () => {
     const dispatch = useDispatch()
 
     const {
         products,
-        totalProduct, latest_products,
-        categories, priceRange, parPage
+        totalProduct,
+        latest_products, priceRange, parPage
     } = useSelector(state => state.home)
 
     const [pageNumber, setPageNumber] = useState(1)
     const [styles, setStyles] = useState('grid')
     const [filter, setFilter] = useState(true)
-    const [category, setCategory] = useState('')
     const [state, setState] = useState({ values: [priceRange.low, priceRange.high] })
     const [rating, setRatingQ] = useState('')
     const [sortPrice, setSortPrice] = useState('')
+
+    let [searchParams, setSearchParams] = useSearchParams()
+    const category = searchParams.get('category')
 
     useEffect(() => {
         dispatch(price_range_product())
@@ -49,8 +51,8 @@ const ShopPage = () => {
     useEffect(() => {
         dispatch(
             query_products({
-                low: state.values[0],
-                high: state.values[1],
+                low: state.values[0] || '',
+                high: state.values[1] || '',
                 category,
                 rating,
                 sortPrice,
@@ -58,14 +60,6 @@ const ShopPage = () => {
             })
         )
     }, [state.values[0], state.values[1], category, rating, pageNumber, sortPrice])
-
-    const queryCategoey = (e, value) => {
-        if (e.target.checked) {
-            setCategory(value)
-        } else {
-            setCategory('')
-        }
-    }
 
     const resetRating = () => {
         setRatingQ('')
@@ -95,35 +89,13 @@ const ShopPage = () => {
                     </div>
                 </div>
             </section>
-
             <section className='py-16'>
                 <div className='w-[85%] md:w-[90%%] sm:w-[90%] lg:w-[90%] h-full mx-auto'>
                     <div className={`md:block hidden ${!filter ? 'mb-6' : 'mb-0'}`}>
-                        <button
-                            onClick={() => setFilter(!filter)}
-                            className='text-center w-full py-2 px-3 bg-indigo-500 text-white'
-                        >
-                            Filter Product
-                        </button>
+                        <button onClick={() => setFilter(!filter)} className='text-center w-full py-2 px-3 bg-indigo-500 text-white'>Filter Product</button>
                     </div>
                     <div className='w-full flex flex-wrap'>
                         <div className={`w-3/12 md-lg:w-4/12 md:w-full pr-8 ${filter ? 'md:h-0 md:overflow-hidden md:mb-6' : 'md:h-auto md:overflow-auto md:mb-0'}`}>
-                            <h2 className='text-3xl font-bold mb-3 text-slate-600'>Category</h2>
-                            <div className='py-2'>
-                                {
-                                    categories.map((c, i) => (
-                                        <div className='flex justify-start items-center gap-2 py-1' key={i}>
-                                            <input
-                                                checked={category === c.name ? true : false}
-                                                onChange={(e) => queryCategoey(e, c.name)}
-                                                type="checkbox"
-                                                id={c.name}
-                                            />
-                                            <label className='text-slate-600 block cursor-pointer' htmlFor={c.name}>{c.name}</label>
-                                        </div>
-                                    ))
-                                }
-                            </div>
                             <div className='py-2 flex flex-col gap-5'>
                                 <h2 className='text-3xl font-bold mb-3 text-slate-600'>Price</h2>
                                 <Range
@@ -184,9 +156,7 @@ const ShopPage = () => {
                                         <span><CiStar /></span>
                                         <span><CiStar /></span>
                                     </div>
-                                    <div
-                                        onClick={resetRating}
-                                        className='text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer'>
+                                    <div onClick={resetRating} className='text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer'>
                                         <span><CiStar /></span>
                                         <span><CiStar /></span>
                                         <span><CiStar /></span>
@@ -196,7 +166,10 @@ const ShopPage = () => {
                                 </div>
                             </div>
                             <div className='py-5 flex flex-col gap-4 md:hidden'>
-                                <Products title="Latest Products" products={latest_products} />
+                                <Products
+                                    title="Latest Products"
+                                    products={latest_products}
+                                />
                             </div>
                         </div>
 
@@ -221,10 +194,7 @@ const ShopPage = () => {
                                     </div>
                                 </div>
                                 <div className='pb-8'>
-                                    <ShopProducts
-                                        products={products}
-                                        styles={styles}
-                                    />
+                                    <ShopProducts products={products} styles={styles} />
                                 </div>
                                 <div>
                                     {
@@ -248,4 +218,4 @@ const ShopPage = () => {
     )
 }
 
-export default ShopPage
+export default CategoryProductsPage

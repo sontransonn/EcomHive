@@ -7,11 +7,9 @@ import "./configs/dotenvConfig.js"
 import corsConfig from './configs/corsConfig.js';
 
 import authRoutes from "./routes/authRoute.js"
-import categoryRoutes from "./routes/dashboard/categoryRoute.js"
-import productRoutes from "./routes/dashboard/productRoute.js"
-import sellerRoutes from "./routes/dashboard/sellerRoute.js"
 
-import homeRoute from "./routes/client/homeRoute.js"
+import clientRoute from "./routes/client/clientRoute.js"
+import dashboardRoute from "./routes/dashboard/dashboardRoute.js"
 
 import { connectDB } from "./services/dbService.js";
 
@@ -24,11 +22,9 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 app.use("/api", authRoutes)
-app.use("/api", categoryRoutes)
-app.use("/api", productRoutes)
-app.use("/api", sellerRoutes)
 
-app.use('/api/home', homeRoute)
+app.use('/api/home', clientRoute)
+app.use("/api", dashboardRoute)
 
 app.listen(PORT, () => {
     connectDB()

@@ -3,6 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
+import {
+    add_to_card,
+    messageClear,
+    add_to_wishlist
+} from "../../../redux/slices/cardSlice"
+
 import { AiFillHeart, AiOutlineShoppingCart } from 'react-icons/ai'
 import { FaEye } from 'react-icons/fa'
 
@@ -13,8 +19,20 @@ const FeatureProducts = ({ products }) => {
     const dispatch = useDispatch()
 
     const { userInfo } = useSelector(state => state.auth)
+    const { successMessage, errorMessage } = useSelector(state => state.card)
 
-    const add_card = (id) => {
+    useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage)
+            dispatch(messageClear())
+        }
+        if (errorMessage) {
+            toast.error(errorMessage)
+            dispatch(messageClear())
+        }
+    }, [errorMessage, successMessage])
+
+    const add_product_to_cart = (id) => {
         if (userInfo) {
             dispatch(add_to_card({
                 userId: userInfo.id,
@@ -26,8 +44,17 @@ const FeatureProducts = ({ products }) => {
         }
     }
 
-    const add_wishlist = (pro) => {
-
+    const add_product_to_wishlist = (pro) => {
+        dispatch(add_to_wishlist({
+            userId: userInfo.id,
+            productId: pro._id,
+            name: pro.name,
+            price: pro.price,
+            image: pro.images[0],
+            discount: pro.discount,
+            rating: pro.rating,
+            slug: pro.slug
+        }))
     }
 
     return (
@@ -39,34 +66,46 @@ const FeatureProducts = ({ products }) => {
                 </div>
             </div>
 
-            <div className='w-full grid grid-cols-5 xl:grid-cols-4 md-lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6'>
+            <div className='w-full grid grid-cols-4 md-lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-6'>
                 {
-                    products.map((p, i) => (
-                        <div
-                            key={i}
-                            className='border group transition-all shadow-lg p-3'
-                        >
+                    products.map((product, i) => (
+                        <div key={i} className='border group transition-all duration-500 hover:shadow-md hover:-mt-3'>
                             <div className='relative overflow-hidden'>
                                 {
-                                    p.discount ? <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-0 top-0'>{p.discount}%</div> : ""
+                                    product.discount ? <div className='flex justify-center items-center absolute text-white w-[38px] h-[38px] rounded-full bg-red-500 font-semibold text-xs left-2 top-2'>{product.discount}%</div> : ""
                                 }
                                 <img
-                                    className='sm:w-full w-full h-[280px]'
-                                    src={p.images[0]}
+                                    className='sm:w-full w-full h-[240px]'
+                                    src={product.images[0]}
                                     alt="product image"
                                 />
                                 <ul className='flex transition-all duration-700 -bottom-10 justify-center items-center gap-2 absolute w-full group-hover:bottom-3'>
-                                    <li onClick={() => add_wishlist(p)} className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all'><AiFillHeart /></li>
-                                    <Link to={`/product/details/${p.slug}`} className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all' ><FaEye /></Link>
-                                    <li onClick={() => add_card(p._id)} className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all'><AiOutlineShoppingCart /></li>
+                                    <li
+                                        onClick={() => add_product_to_wishlist(product)}
+                                        className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all'
+                                    >
+                                        <AiFillHeart />
+                                    </li>
+                                    <Link
+                                        to={`/product/details/${product.slug}`}
+                                        className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all'
+                                    >
+                                        <FaEye />
+                                    </Link>
+                                    <li
+                                        onClick={() => add_product_to_cart(product._id)}
+                                        className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all'
+                                    >
+                                        <AiOutlineShoppingCart />
+                                    </li>
                                 </ul>
                             </div>
                             <div className='py-3 text-slate-600 px-2'>
-                                <h2 className='whitespace-nowrap overflow-hidden overflow-ellipsis'>{p.name}</h2>
-                                <div className='flex justify-start items-center gap-3 mt-1'>
-                                    <span className='text-lg  font-bold'>${p.price}</span>
+                                <h2>{product.name}</h2>
+                                <div className='flex justify-start items-center gap-3'>
+                                    <span className='text-lg  font-bold'>${product.price}</span>
                                     <div className='flex'>
-                                        <Rating rating={p.rating} />
+                                        <Rating ratings={product.rating} />
                                     </div>
                                 </div>
                             </div>

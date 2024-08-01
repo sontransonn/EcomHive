@@ -1,15 +1,13 @@
 import express from "express"
 
-import {
-    add_category,
-    get_category
-} from "../../controllers/dashboard/categoryController.js"
+import categoryController from "../../controllers/dashboard/categoryController.js"
 
 import { authGuard } from "../../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.post('/category-add', authGuard, add_category)
-router.get('/category-get', authGuard, get_category)
+router.get('/category-get', authGuard, categoryController.get_categories_by_query)
+
+router.post('/category-add', authGuard, categoryController.add_category)
 
 export default router

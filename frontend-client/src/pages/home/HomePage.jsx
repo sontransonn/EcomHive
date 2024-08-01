@@ -6,12 +6,11 @@ import {
     get_products
 } from "../../redux/slices/homeSlice"
 
-import Header from '../../components/Header'
+import MainLayout from '../../layouts/MainLayout'
 import Banner from './components/Banner'
 import Categories from './components/Categories'
 import FeatureProducts from './components/FeatureProducts'
-import Products from './components/Products'
-import Footer from '../../components/Footer'
+import Products from '../../components/Products'
 
 const HomePage = () => {
     const dispatch = useDispatch()
@@ -28,12 +27,13 @@ const HomePage = () => {
     }, [])
 
     return (
-        <div className='w-full flex flex-col gap-8 '>
-            <Header />
+        <MainLayout>
             <Banner />
             <Categories />
 
-            <FeatureProducts products={products} />
+            <FeatureProducts
+                products={products}
+            />
 
             <div className='py-10'>
                 <div className='w-[85%] flex flex-wrap mx-auto'>
@@ -50,9 +50,7 @@ const HomePage = () => {
                     </div>
                 </div>
             </div>
-
-            <Footer />
-        </div>
+        </MainLayout>
     )
 }
 

@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
+import {
+    get_card_products,
+    get_wishlist_products
+} from "../../redux/slices/cardSlice"
+
 import { GrMail } from 'react-icons/gr'
 import { BsTelephoneFill } from "react-icons/bs";
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md'
@@ -14,13 +19,14 @@ const Header = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    const { categories } = useSelector(state => state.home)
+    const { userInfo } = useSelector(state => state.auth)
+    const { card_product_count, wishlist_count } = useSelector(state => state.card)
+
     const [showShidebar, setShowShidebar] = useState(true);
     const [categoryShow, setCategoryShow] = useState(true)
     const [searchValue, setSearchValue] = useState('')
     const [category, setCategory] = useState('')
-
-    const { categories } = useSelector(state => state.home)
-    const { userInfo } = useSelector(state => state.auth)
 
     useEffect(() => {
         if (userInfo) {
@@ -154,24 +160,28 @@ const Header = () => {
                                             className='relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]'
                                         >
                                             <span className='text-xl text-red-500'><AiFillHeart /></span>
-                                            {/* {
-                                                wishlist_count !== 0 && <div className='w-[20px] h-[20px] absolute bg-green-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px]'>
-                                                    {wishlist_count}
-                                                </div>
-                                            } */}
+                                            {
+                                                wishlist_count !== 0 && (
+                                                    <div className='w-[20px] h-[20px] absolute bg-green-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px]'>
+                                                        {wishlist_count}
+                                                    </div>
+                                                )
+                                            }
                                         </div>
                                         <div
-                                            // onClick={redirect_card_page}
+                                            onClick={redirect_card_page}
                                             className='relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]'
                                         >
                                             <span className='text-xl text-orange-500'><AiFillShopping /></span>
-                                            {/* {
-                                                card_product_count !== 0 && <div className='w-[20px] h-[20px] absolute bg-green-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px]'>
-                                                    {
-                                                        card_product_count
-                                                    }
-                                                </div>
-                                            } */}
+                                            {
+                                                card_product_count !== 0 && (
+                                                    <div className='w-[20px] h-[20px] absolute bg-green-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px]'>
+                                                        {
+                                                            card_product_count
+                                                        }
+                                                    </div>
+                                                )
+                                            }
                                         </div>
                                     </div>
                                 </div>

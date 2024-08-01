@@ -25,7 +25,6 @@ export const get_products = createAsyncThunk(
         try {
             const { data } = await api.get('/home/get-products')
 
-            console.log(data);
             return fulfillWithValue(data)
         } catch (error) {
             console.log(error.response)

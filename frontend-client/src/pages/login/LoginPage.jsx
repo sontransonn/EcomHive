@@ -1,21 +1,47 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import FadeLoader from 'react-spinners/FadeLoader'
 import toast from 'react-hot-toast'
 
+import {
+    customer_login,
+    messageClear
+} from "../../redux/slices/authSlice"
+
 import { FaFacebookF } from 'react-icons/fa'
 import { AiOutlineGoogle } from 'react-icons/ai'
 
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
+import MainLayout from '../../layouts/MainLayout'
 
 const LoginPage = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const {
+        loader,
+        successMessage, errorMessage, userInfo
+    } = useSelector(state => state.auth)
 
     const [state, setState] = useState({
         email: '',
         password: ''
     })
+
+    useEffect(() => {
+        if (successMessage) {
+            toast.success(successMessage)
+            dispatch(messageClear())
+        }
+        if (errorMessage) {
+            toast.error(errorMessage)
+            dispatch(messageClear())
+        }
+        if (userInfo) {
+            navigate('/')
+        }
+    }, [successMessage, errorMessage])
+
 
     const inputHandle = (e) => {
         setState({
@@ -30,13 +56,14 @@ const LoginPage = () => {
     }
 
     return (
-        <div>
-            <Header />
-            {/* {
-                loader && <div className='w-screen h-screen flex justify-center items-center fixed left-0 top-0 bg-[#38303033] z-[999]'>
-                    <FadeLoader />
-                </div>
-            } */}
+        <MainLayout>
+            {
+                loader && (
+                    <div className='w-screen h-screen flex justify-center items-center fixed left-0 top-0 bg-[#38303033] z-[999]'>
+                        <FadeLoader />
+                    </div>
+                )
+            }
             <div className='bg-slate-200 mt-4'>
                 <div className='w-full justify-center items-center p-10'>
                     <div className='grid grid-cols-2 w-[60%] mx-auto bg-white rounded-md'>
@@ -109,15 +136,14 @@ const LoginPage = () => {
                         <div className='w-full h-full py-4 pr-4'>
                             <img
                                 className='w-full h-[95%]'
-                                src="http://localhost:5173/images/login.jpg"
+                                src="http://localhost:3000/images/login.jpg"
                                 alt=""
                             />
                         </div>
                     </div>
                 </div>
             </div>
-            <Footer />
-        </div>
+        </MainLayout>
     )
 }
 

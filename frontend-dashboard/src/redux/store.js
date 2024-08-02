@@ -12,7 +12,6 @@ const store = configureStore({
         product: productReducer,
         seller: sellerReducer
     },
-
     middleware: getDefaultMiddleware => {
         return getDefaultMiddleware({
             serializableCheck: false

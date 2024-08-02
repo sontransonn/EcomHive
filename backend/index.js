@@ -7,26 +7,42 @@ import "./configs/dotenvConfig.js"
 import corsConfig from './configs/corsConfig.js';
 
 import authRoutes from "./routes/authRoute.js"
+import orderRoute from "./routes/orderRoute.js"
 
-import clientRoute from "./routes/client/clientRoute.js"
-import dashboardRoute from "./routes/dashboard/dashboardRoute.js"
+import ClientCategoryRoute from "./routes/client/categoryRoute.js"
+import ClientProductRoute from "./routes/client/productRoute.js"
+import ClientReviewRoute from "./routes/client/reviewRoute.js"
+import ClientCartRoute from "./routes/client/cartRoute.js"
 
-import { connectDB } from "./services/dbService.js";
+import DashboardCategoryRoute from "./routes/dashboard/categoryRoute.js"
+import DashboardProductRoute from "./routes/dashboard/productRoute.js"
+import DashboardSellerRoute from "./routes/dashboard/sellerRoute.js"
+
+import dbService from "./services/dbService.js"
 
 const app = express()
 
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 8080
 
 app.use(corsConfig)
 app.use(bodyParser.json())
 app.use(cookieParser())
 
-app.use("/api", authRoutes)
+app.use("/api/v1/auth", authRoutes)
+app.use("/api", orderRoute)
 
-app.use('/api/home', clientRoute)
-app.use("/api", dashboardRoute)
+// -----ClientRoute
+app.use('/api/v1/client', ClientCategoryRoute)
+app.use('/api/v1/client', ClientProductRoute)
+app.use('/api/v1/home', ClientReviewRoute)
+app.use('/api/v1/home', ClientCartRoute)
+
+// -----DashboardRoute
+app.use("/api/v1/dashboard", DashboardCategoryRoute)
+app.use("/api/v1/dashboard", DashboardProductRoute)
+app.use("/api/v1/dashboard", DashboardSellerRoute)
 
 app.listen(PORT, () => {
-    connectDB()
+    dbService.connectDB()
     console.log(`Server is running on port ${PORT}`)
 });

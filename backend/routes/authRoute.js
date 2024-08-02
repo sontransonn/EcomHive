@@ -8,9 +8,14 @@ const router = express.Router();
 
 router.get('/get-user', authGuard, authController.getUser)
 
+// -----admin
 router.post('/admin-login', authController.admin_login)
+
+// -----seller
 router.post('/seller-register', authController.seller_register)
 router.post('/seller-login', authController.seller_login)
+
+// -----customer
 router.post('/customer-register', authController.customer_register)
 router.post('/customer-login', authController.customer_login)
 

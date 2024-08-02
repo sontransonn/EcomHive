@@ -19,7 +19,7 @@ const LoginPage = () => {
     const dispatch = useDispatch()
 
     const {
-        loader,
+        loading,
         successMessage, errorMessage, userInfo
     } = useSelector(state => state.auth)
 

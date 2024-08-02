@@ -5,19 +5,24 @@ import { PropagateLoader } from 'react-spinners'
 import toast from 'react-hot-toast'
 
 import {
-    get_product,
+    get_product_by_productId,
     messageClear,
-    update_product,
-    product_image_update
+    update_product_by_productId,
+    update_product_image_by_productId
 } from "../../redux/slices/productSlice"
-import { get_category } from "../../redux/slices/categorySlice"
-
-import { BsImages } from 'react-icons/bs'
-import { IoCloseSharp } from 'react-icons/io5'
+import { get_categories_by_query } from "../../redux/slices/categorySlice"
 
 const EditProduct = () => {
     const { productId } = useParams()
     const dispatch = useDispatch()
+
+    const { categories } = useSelector(state => state.category)
+    const {
+        product,
+        loader,
+        errorMessage,
+        successMessage
+    } = useSelector(state => state.product)
 
     const [cateShow, setCateShow] = useState(false)
     const [category, setCategory] = useState('')
@@ -33,16 +38,8 @@ const EditProduct = () => {
         stock: ""
     })
 
-    const { categories } = useSelector(state => state.category)
-    const {
-        product,
-        loader,
-        errorMessage,
-        successMessage
-    } = useSelector(state => state.product)
-
     useEffect(() => {
-        dispatch(get_category({
+        dispatch(get_categories_by_query({
             searchValue: '',
             parPage: '',
             page: ""
@@ -56,7 +53,7 @@ const EditProduct = () => {
     }, [categories])
 
     useEffect(() => {
-        dispatch(get_product(productId))
+        dispatch(get_product_by_productId(productId))
     }, [productId])
 
     useEffect(() => {
@@ -104,7 +101,7 @@ const EditProduct = () => {
 
     const changeImage = (img, files) => {
         if (files.length > 0) {
-            dispatch(product_image_update({
+            dispatch(update_product_image_by_productId({
                 oldImage: img,
                 newImage: files[0],
                 productId
@@ -124,7 +121,7 @@ const EditProduct = () => {
             productId: productId
         }
 
-        dispatch(update_product(obj))
+        dispatch(update_product_by_productId(obj))
     }
 
     return (

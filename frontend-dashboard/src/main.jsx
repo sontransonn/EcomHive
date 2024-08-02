@@ -10,22 +10,13 @@ const App = lazy(() => import('./App'))
 import store from './redux/store'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
-  <BrowserRouter>
-    <Provider store={store}>
-      <Suspense fallback="loading...">
-        <App />
-        <Toaster
-          toastOptions={{
-            position: 'top-right',
-            style: {
-              background: '#283046',
-              color: 'white'
-            }
-          }}
-        />
-      </Suspense>
-    </Provider>
-  </BrowserRouter>
-  // </React.StrictMode>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <Provider store={store}>
+        <Suspense fallback="loading...">
+          <App />
+        </Suspense>
+      </Provider>
+    </BrowserRouter>
+  </React.StrictMode>,
 )

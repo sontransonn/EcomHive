@@ -2,15 +2,14 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: "http://localhost:5000/api/v1/client",
     withCredentials: true
 })
 
 export const get_category = createAsyncThunk(
-    'product/get_category',
-    async (_, { fulfillWithValue }) => {
+    'product/get_category', async (_, { fulfillWithValue }) => {
         try {
-            const { data } = await api.get('/home/get-categorys')
+            const { data } = await api.get('/get-categorys')
 
             return fulfillWithValue(data)
         } catch (error) {
@@ -23,7 +22,7 @@ export const get_products = createAsyncThunk(
     'product/get_products',
     async (_, { fulfillWithValue }) => {
         try {
-            const { data } = await api.get('/home/get-products')
+            const { data } = await api.get('/get-products')
 
             return fulfillWithValue(data)
         } catch (error) {
@@ -40,7 +39,7 @@ export const get_product = createAsyncThunk(
         try {
             const {
                 data
-            } = await api.get(`/home/get-product/${slug}`)
+            } = await api.get(`/get-product/${slug}`)
             console.log(data)
             return fulfillWithValue(data)
         } catch (error) {
@@ -53,7 +52,7 @@ export const price_range_product = createAsyncThunk(
     'product/price_range_product',
     async (_, { fulfillWithValue }) => {
         try {
-            const { data } = await api.get('/home/price-range-latest-product')
+            const { data } = await api.get('/price-range-latest-product')
 
             return fulfillWithValue(data)
         } catch (error) {
@@ -82,7 +81,7 @@ export const query_products = createAsyncThunk(
     'product/query_products',
     async (query, { fulfillWithValue }) => {
         try {
-            const { data } = await api.get(`/home/query-products?category=${query.category}&&rating=${query.rating}&&lowPrice=${query.low}&&highPrice=${query.high}&&sortPrice=${query.sortPrice}&&pageNumber=${query.pageNumber}&&searchValue=${query.searchValue ? query.searchValue : ''}`)
+            const { data } = await api.get(`/query-products?category=${query.category}&&rating=${query.rating}&&lowPrice=${query.low}&&highPrice=${query.high}&&sortPrice=${query.sortPrice}&&pageNumber=${query.pageNumber}&&searchValue=${query.searchValue ? query.searchValue : ''}`)
 
             return fulfillWithValue(data)
         } catch (error) {

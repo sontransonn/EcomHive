@@ -2,20 +2,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'http://localhost:5000/api'
+    baseURL: 'http://localhost:8080/api/v1/dashboard',
+    withCredentials: true
 })
 
-export const categoryAdd = createAsyncThunk(
-    'category/categoryAdd',
-    async ({ name, image }, { rejectWithValue, fulfillWithValue }) => {
-
+// Lấy ra các category theo truy vấn
+export const get_categories_by_query = createAsyncThunk(
+    'category/get_categories_by_query',
+    async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const formData = new FormData()
-
-            formData.append('name', name)
-            formData.append('image', image)
-
-            const { data } = await api.post('/category-add', formData, { withCredentials: true })
+            const { data } = await api.get(`/get-categories-by-query?page=${page}&&searchValue=${searchValue}&&parPage=${parPage}`)
 
             return fulfillWithValue(data)
         } catch (error) {
@@ -24,11 +20,18 @@ export const categoryAdd = createAsyncThunk(
     }
 )
 
-export const get_category = createAsyncThunk(
-    'category/get_category',
-    async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
+// Thêm category (Admin)
+export const add_category = createAsyncThunk(
+    'category/add_category',
+    async ({ name, image }, { rejectWithValue, fulfillWithValue }) => {
+
         try {
-            const { data } = await api.get(`/category-get?page=${page}&&searchValue=${searchValue}&&parPage=${parPage}`, { withCredentials: true })
+            const formData = new FormData()
+
+            formData.append('name', name)
+            formData.append('image', image)
+
+            const { data } = await api.post('/add-category', formData)
 
             return fulfillWithValue(data)
         } catch (error) {
@@ -54,19 +57,19 @@ export const categorySlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(categoryAdd.pending, (state, action) => {
+            .addCase(add_category.pending, (state, action) => {
                 state.loader = true
             })
-            .addCase(categoryAdd.rejected, (state, action) => {
+            .addCase(add_category.rejected, (state, action) => {
                 state.loader = false
                 state.errorMessage = action.payload.error
             })
-            .addCase(categoryAdd.fulfilled, (state, action) => {
+            .addCase(add_category.fulfilled, (state, action) => {
                 state.loader = false
                 state.successMessage = action.payload.message
                 state.categories = [...state.categories, action.payload.category]
             })
-            .addCase(get_category.fulfilled, (state, action) => {
+            .addCase(get_categories_by_query.fulfilled, (state, action) => {
                 state.totalCategory = action.payload.totalCategory
                 state.categories = action.payload.categories
             })

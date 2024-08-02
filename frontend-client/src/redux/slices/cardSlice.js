@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: "http://localhost:5000/api/v1",
     withCredentials: true
 })
 
@@ -36,14 +36,10 @@ export const get_card_products = createAsyncThunk(
 
 export const delete_card_product = createAsyncThunk(
     'card/delete_card_product',
-    async (card_id, {
-        rejectWithValue,
-        fulfillWithValue
-    }) => {
+    async (card_id, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const {
-                data
-            } = await api.delete(`/home/product/delete-card-product/${card_id}`)
+            const { data } = await api.delete(`/home/delete-card-product/${card_id}`)
+
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -60,7 +56,7 @@ export const quantity_inc = createAsyncThunk(
         try {
             const {
                 data
-            } = await api.put(`/home/product/quantity-inc/${card_id}`)
+            } = await api.put(`/home/quantity-inc/${card_id}`)
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -77,7 +73,7 @@ export const quantity_dec = createAsyncThunk(
         try {
             const {
                 data
-            } = await api.put(`/home/product/quantity-dec/${card_id}`)
+            } = await api.put(`/home/quantity-dec/${card_id}`)
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)

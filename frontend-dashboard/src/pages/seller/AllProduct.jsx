@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import {
-    get_products
+    get_products_by_query
 } from "../../redux/slices/productSlice"
 
 import { FaEdit, FaEye, FaTrash } from 'react-icons/fa'
@@ -28,7 +28,7 @@ const AllProduct = () => {
             searchValue
         }
 
-        dispatch(get_products(obj))
+        dispatch(get_products_by_query(obj))
     }, [searchValue, currentPage, parPage])
 
     return (

@@ -16,17 +16,17 @@ import { FaEdit } from 'react-icons/fa'
 const SellerProfile = () => {
     const dispatch = useDispatch()
 
+    const {
+        userInfo,
+        loader, successMessage
+    } = useSelector(state => state.auth)
+
     const [state, setState] = useState({
         division: '',
         district: '',
         shopName: '',
         sub_district: ''
     })
-
-    const {
-        userInfo,
-        loader, successMessage
-    } = useSelector(state => state.auth)
 
     useEffect(() => {
         if (successMessage) {

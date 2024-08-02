@@ -15,6 +15,8 @@ import ShopPage from './pages/shop/ShopPage'
 import CategoryProductsPage from './pages/category-products/CategoryProductsPage';
 import SearchProductsPage from './pages/search-products/SearchProductsPage';
 import ProductDetails from './pages/product-details/ProductDetails';
+import Cart from './pages/cart/Cart';
+import Shipping from './pages/shipping/Shipping';
 import RegisterPage from './pages/register/RegisterPage'
 import LoginPage from './pages/login/LoginPage'
 
@@ -32,9 +34,12 @@ const App = () => {
         <Route path='/shop' element={<ShopPage />} />
         <Route path='/products?' element={<CategoryProductsPage />} />
         <Route path='/products/search?' element={<SearchProductsPage />} />
+        <Route path='/product/details/:slug' element={<ProductDetails />} />
+        <Route path='/card' element={<Cart />} />
+        <Route path='/shipping' element={<Shipping />} />
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/login' element={<LoginPage />} />
-        <Route path='/product/details/:slug' element={<ProductDetails />} />
+
       </Routes>
 
       <Toaster position='top-right' />

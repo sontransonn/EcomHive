@@ -150,15 +150,58 @@ class cartController {
     }
 
     static quantity_inc = async (req, res) => {
+        try {
+            const { card_id } = req.params
 
+            const product = await CARDS.findById(card_id)
+            const {
+                quantity
+            } = product
+
+            await CARDS.findByIdAndUpdate(card_id, {
+                quantity: quantity + 1
+            })
+            res.status(200).json({
+                message: 'success'
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
     }
 
     static quantity_dec = async (req, res) => {
-
+        const { card_id } = req.params
+        try {
+            const product = await CARDS.findById(card_id)
+            const {
+                quantity
+            } = product
+            await CARDS.findByIdAndUpdate(card_id, {
+                quantity: quantity - 1
+            })
+            res.status(200).json({
+                message: 'success'
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
     }
 
     static delete_card_product = async (req, res) => {
+        try {
+            const { card_id } = req.params
 
+            await CARDS.findByIdAndDelete(card_id)
+
+            res.status(200).json({
+                message: 'success'
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
     }
 
     static delete_wishlist = async (req, res) => {

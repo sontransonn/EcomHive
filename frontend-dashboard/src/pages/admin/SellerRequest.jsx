@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import {
-    get_seller_request
+    get_pending_sellers_by_query
 } from "../../redux/slices/sellerSlice"
 
 import { FaEye } from 'react-icons/fa'
@@ -25,7 +25,7 @@ const SellerRequest = () => {
     } = useSelector(state => state.seller)
 
     useEffect(() => {
-        dispatch(get_seller_request({
+        dispatch(get_pending_sellers_by_query({
             parPage,
             searchValue,
             page: currentPage

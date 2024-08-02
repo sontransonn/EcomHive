@@ -3,9 +3,18 @@ import { jwtDecode } from 'jwt-decode'
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: "http://localhost:5000/api/v1/auth",
     withCredentials: true
 })
+
+const decodeToken = (token) => {
+    if (token) {
+        const userInfo = jwtDecode(token)
+        return userInfo
+    } else {
+        return ''
+    }
+}
 
 export const customer_register = createAsyncThunk(
     'auth/customer_register',
@@ -36,20 +45,10 @@ export const customer_login = createAsyncThunk(
     }
 )
 
-
-const decodeToken = (token) => {
-    if (token) {
-        const userInfo = jwtDecode(token)
-        return userInfo
-    } else {
-        return ''
-    }
-}
-
 export const authSlice = createSlice({
     name: 'auth',
     initialState: {
-        loader: false,
+        loading: false,
         userInfo: decodeToken(localStorage.getItem('customerToken')),
         errorMessage: '',
         successMessage: ''

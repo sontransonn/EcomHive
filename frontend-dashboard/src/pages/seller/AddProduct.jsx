@@ -8,13 +8,20 @@ import {
     add_product,
     messageClear
 } from "../../redux/slices/productSlice"
-import { get_category } from "../../redux/slices/categorySlice"
+import { get_categories_by_query } from "../../redux/slices/categorySlice"
 
 import { BsImages } from 'react-icons/bs'
 import { IoCloseSharp } from 'react-icons/io5'
 
 const AddProduct = () => {
     const dispatch = useDispatch()
+
+    const { categories } = useSelector(state => state.category)
+    const {
+        successMessage,
+        errorMessage,
+        loader
+    } = useSelector(state => state.product)
 
     const [cateShow, setCateShow] = useState(false)
     const [category, setCategory] = useState('')
@@ -31,15 +38,8 @@ const AddProduct = () => {
         stock: ""
     })
 
-    const { categories } = useSelector(state => state.category)
-    const {
-        successMessage,
-        errorMessage,
-        loader
-    } = useSelector(state => state.product)
-
     useEffect(() => {
-        dispatch(get_category({
+        dispatch(get_categories_by_query({
             searchValue: '',
             parPage: '',
             page: ""

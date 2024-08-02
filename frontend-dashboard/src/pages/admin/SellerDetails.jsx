@@ -4,8 +4,8 @@ import toast from 'react-hot-toast'
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
-    get_seller,
-    seller_status_update,
+    get_seller_by_sellerId,
+    update_status_seller_by_sellerId,
     messageClear
 } from "../../redux/slices/sellerSlice"
 
@@ -13,16 +13,13 @@ const SellerDetails = () => {
     const dispatch = useDispatch()
     const { sellerId } = useParams()
 
-    const [status, setStatus] = useState('')
+    const { seller, successMessage } = useSelector(state => state.seller)
 
-    const {
-        seller,
-        successMessage
-    } = useSelector(state => state.seller)
+    const [status, setStatus] = useState('')
 
     // Lấy thông tin seller
     useEffect(() => {
-        dispatch(get_seller(sellerId))
+        dispatch(get_seller_by_sellerId(sellerId))
     }, [sellerId])
 
     // Xử lý thông báo
@@ -42,7 +39,7 @@ const SellerDetails = () => {
 
     const submit = (e) => {
         e.preventDefault()
-        dispatch(seller_status_update({
+        dispatch(update_status_seller_by_sellerId({
             sellerId,
             status
         }))

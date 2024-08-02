@@ -6,8 +6,8 @@ import { PropagateLoader } from 'react-spinners'
 
 import {
     messageClear,
-    categoryAdd,
-    get_category
+    add_category,
+    get_categories_by_query
 } from "../../redux/slices/categorySlice"
 
 import { FaEdit, FaTrash } from 'react-icons/fa'
@@ -20,6 +20,11 @@ import Pagination from '../../components/Pagination'
 const Category = () => {
     const dispatch = useDispatch()
 
+    const {
+        loader,
+        successMessage, errorMessage, categories
+    } = useSelector(state => state.category)
+
     const [currentPage, setCurrentPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
     const [parPage, setParPage] = useState(5)
@@ -29,13 +34,6 @@ const Category = () => {
         name: '',
         image: ''
     })
-
-    const {
-        loader,
-        successMessage,
-        errorMessage,
-        categories
-    } = useSelector(state => state.category)
 
     useEffect(() => {
         if (errorMessage) {
@@ -60,7 +58,7 @@ const Category = () => {
             searchValue
         }
 
-        dispatch(get_category(obj))
+        dispatch(get_categories_by_query(obj))
     }, [searchValue, currentPage, parPage])
 
     const imageHandle = (e) => {
@@ -75,15 +73,15 @@ const Category = () => {
         }
     }
 
-    const add_category = (e) => {
+    const handleAddCategory = (e) => {
         e.preventDefault()
-        dispatch(categoryAdd(state))
+        dispatch(add_category(state))
     }
 
     return (
         <div className='px-2 lg:px-7 pt-5'>
             <div className='flex lg:hidden justify-between items-center mb-5 p-4 bg-[#283046] rounded-md'>
-                <h1 className='text-[#d0d2d6] font-semibold text-lg'>Categorys</h1>
+                <h1 className='text-[#d0d2d6] font-semibold text-lg'>Categories</h1>
                 <button
                     onClick={() => setShow(true)}
                     className='bg-indigo-500 shadow-lg hover:shadow-indigo-500/50 px-4 py-2 cursor-pointer text-white rounded-sm text-sm'
@@ -157,7 +155,7 @@ const Category = () => {
                                 </div>
                             </div>
 
-                            <form onSubmit={add_category}>
+                            <form onSubmit={handleAddCategory}>
                                 <div className='flex flex-col w-full gap-1 mb-3'>
                                     <label htmlFor="name">Category name</label>
                                     <input

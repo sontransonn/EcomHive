@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Toaster } from 'react-hot-toast'
 
 import {
   get_user_info
@@ -30,7 +31,11 @@ const App = () => {
   }, [token])
 
   return (
-    <Router allRoutes={allRoutes} />
+    <>
+      <Router allRoutes={allRoutes} />
+      <Toaster position='top-right' />
+    </>
+
   )
 }
 

@@ -1,3 +1,7 @@
+import AUTHORDERS from "../models/authOrders.js"
+import CUSTOMERORDERS from "../models/customerOrders.js"
+import CARTS from "../models/cartsModel.js"
+
 class orderController {
     static order_confirm = async (req, res) => {
 
@@ -16,7 +20,17 @@ class orderController {
     }
 
     static place_order = async (req, res) => {
-        console.log("helo");
+        try {
+            const {
+                price, products,
+                shipping_fee, shippingInfo, userId
+            } = req.body
+
+            console.log(req.body);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
     }
 
     static create_payment = async (req, res) => {

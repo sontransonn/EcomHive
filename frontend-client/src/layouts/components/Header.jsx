@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import {
-    get_card_products,
-    get_wishlist_products
-} from "../../redux/slices/cardSlice"
+import { get_products_in_wishlist } from "../../redux/slices/wishlistSlice"
+import { get_products_in_cart } from "../../redux/slices/cartSlice"
 
 import { GrMail } from 'react-icons/gr'
 import { BsTelephoneFill } from "react-icons/bs";
@@ -19,9 +17,9 @@ const Header = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const { categories } = useSelector(state => state.home)
+    const { categories } = useSelector(state => state.category)
     const { userInfo } = useSelector(state => state.auth)
-    const { card_product_count, wishlist_count } = useSelector(state => state.card)
+    const { card_product_count, wishlist_count } = useSelector(state => state.cart)
 
     const [showShidebar, setShowShidebar] = useState(true);
     const [categoryShow, setCategoryShow] = useState(true)
@@ -30,8 +28,8 @@ const Header = () => {
 
     useEffect(() => {
         if (userInfo) {
-            dispatch(get_card_products(userInfo.id))
-            dispatch(get_wishlist_products(userInfo.id))
+            dispatch(get_products_in_cart(userInfo.id))
+            dispatch(get_products_in_wishlist(userInfo.id))
         }
     }, [userInfo])
 

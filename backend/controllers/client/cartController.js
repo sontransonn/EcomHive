@@ -1,15 +1,15 @@
 import { mongo } from "mongoose"
 
-import CARDS from "../../models/cardsModel.js"
+import CARTS from "../../models/cartsModel.js"
 
 class cartController {
-
-    static get_card_products = async (req, res) => {
+    // Lấy ra các sản phẩm trong giỏ hàng
+    static get_products_in_cart = async (req, res) => {
         try {
             const co = 5;
             const { userId } = req.params
 
-            const card_products = await CARDS.aggregate([{
+            const card_products = await CARTS.aggregate([{
                 $match: {
                     userId: {
                         $eq: new mongo.ObjectId(userId)
@@ -103,15 +103,12 @@ class cartController {
         }
     }
 
-    static get_wishlist = async (req, res) => {
-
-    }
-
-    static add_to_cart = async (req, res) => {
+    // Thêm sản phẩm vào giỏ hàng
+    static add_product_to_cart = async (req, res) => {
         try {
             const { userId, productId, quantity } = req.body
 
-            const product = await CARDS.findOne({
+            const product = await CARTS.findOne({
                 $and: [{
                     productId: {
                         $eq: productId
@@ -129,7 +126,7 @@ class cartController {
                 return res.status(400).json({ error: 'Product already added to card' })
             }
 
-            const newProduct = await CARDS.create({
+            const newProduct = await CARTS.create({
                 userId,
                 productId,
                 quantity
@@ -145,20 +142,17 @@ class cartController {
         }
     }
 
-    static add_wishlist = async (req, res) => {
-
-    }
-
+    // Tăng số lượng sản phẩm
     static quantity_inc = async (req, res) => {
         try {
             const { card_id } = req.params
 
-            const product = await CARDS.findById(card_id)
+            const product = await CARTS.findById(card_id)
             const {
                 quantity
             } = product
 
-            await CARDS.findByIdAndUpdate(card_id, {
+            await CARTS.findByIdAndUpdate(card_id, {
                 quantity: quantity + 1
             })
             res.status(200).json({
@@ -170,14 +164,15 @@ class cartController {
         }
     }
 
+    // Giảm số lượng sản phẩm
     static quantity_dec = async (req, res) => {
         const { card_id } = req.params
         try {
-            const product = await CARDS.findById(card_id)
+            const product = await CARTS.findById(card_id)
             const {
                 quantity
             } = product
-            await CARDS.findByIdAndUpdate(card_id, {
+            await CARTS.findByIdAndUpdate(card_id, {
                 quantity: quantity - 1
             })
             res.status(200).json({
@@ -189,11 +184,12 @@ class cartController {
         }
     }
 
-    static delete_card_product = async (req, res) => {
+    // Xóa sản phẩm trong giỏ hàng
+    static delete_product_in_cart = async (req, res) => {
         try {
             const { card_id } = req.params
 
-            await CARDS.findByIdAndDelete(card_id)
+            await CARTS.findByIdAndDelete(card_id)
 
             res.status(200).json({
                 message: 'success'
@@ -203,11 +199,6 @@ class cartController {
             res.status(500).json({ error: error })
         }
     }
-
-    static delete_wishlist = async (req, res) => {
-
-    }
-
 }
 
 export default cartController

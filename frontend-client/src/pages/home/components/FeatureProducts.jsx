@@ -4,10 +4,10 @@ import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
 import {
-    add_to_card,
+    add_product_to_cart,
     messageClear,
-    add_to_wishlist
-} from "../../../redux/slices/cardSlice"
+} from "../../../redux/slices/cartSlice"
+import { add_product_to_wishlist } from "../../../redux/slices/wishlistSlice"
 
 import { AiFillHeart, AiOutlineShoppingCart } from 'react-icons/ai'
 import { FaEye } from 'react-icons/fa'
@@ -19,7 +19,7 @@ const FeatureProducts = ({ products }) => {
     const dispatch = useDispatch()
 
     const { userInfo } = useSelector(state => state.auth)
-    const { successMessage, errorMessage } = useSelector(state => state.card)
+    const { successMessage, errorMessage } = useSelector(state => state.cart)
 
     useEffect(() => {
         if (successMessage) {
@@ -32,9 +32,9 @@ const FeatureProducts = ({ products }) => {
         }
     }, [errorMessage, successMessage])
 
-    const add_product_to_cart = (id) => {
+    const handleAddProductToCart = (id) => {
         if (userInfo) {
-            dispatch(add_to_card({
+            dispatch(add_product_to_cart({
                 userId: userInfo.id,
                 quantity: 1,
                 productId: id
@@ -44,8 +44,8 @@ const FeatureProducts = ({ products }) => {
         }
     }
 
-    const add_product_to_wishlist = (pro) => {
-        dispatch(add_to_wishlist({
+    const handleAddProductToWishlist = (pro) => {
+        dispatch(add_product_to_wishlist({
             userId: userInfo.id,
             productId: pro._id,
             name: pro.name,
@@ -81,7 +81,7 @@ const FeatureProducts = ({ products }) => {
                                 />
                                 <ul className='flex transition-all duration-700 -bottom-10 justify-center items-center gap-2 absolute w-full group-hover:bottom-3'>
                                     <li
-                                        onClick={() => add_product_to_wishlist(product)}
+                                        onClick={() => handleAddProductToWishlist(product)}
                                         className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all'
                                     >
                                         <AiFillHeart />
@@ -93,7 +93,7 @@ const FeatureProducts = ({ products }) => {
                                         <FaEye />
                                     </Link>
                                     <li
-                                        onClick={() => add_product_to_cart(product._id)}
+                                        onClick={() => handleAddProductToCart(product._id)}
                                         className='w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#7fad39] hover:text-white hover:rotate-[720deg] transition-all'
                                     >
                                         <AiOutlineShoppingCart />

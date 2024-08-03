@@ -35,7 +35,7 @@ const responsive = {
 }
 
 const Categories = () => {
-    const { categories } = useSelector(state => state.home)
+    const { categories } = useSelector(state => state.category)
 
     return (
         <div className='w-[85%] mx-auto relative'>

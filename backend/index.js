@@ -13,6 +13,7 @@ import ClientCategoryRoute from "./routes/client/categoryRoute.js"
 import ClientProductRoute from "./routes/client/productRoute.js"
 import ClientReviewRoute from "./routes/client/reviewRoute.js"
 import ClientCartRoute from "./routes/client/cartRoute.js"
+import ClientWishlistRoute from "./routes/client/wishlistRoute.js"
 
 import DashboardCategoryRoute from "./routes/dashboard/categoryRoute.js"
 import DashboardProductRoute from "./routes/dashboard/productRoute.js"
@@ -29,13 +30,14 @@ app.use(bodyParser.json())
 app.use(cookieParser())
 
 app.use("/api/v1/auth", authRoutes)
-app.use("/api", orderRoute)
+app.use("/api/v1/order", orderRoute)
 
 // -----ClientRoute
 app.use('/api/v1/client', ClientCategoryRoute)
 app.use('/api/v1/client', ClientProductRoute)
-app.use('/api/v1/home', ClientReviewRoute)
-app.use('/api/v1/home', ClientCartRoute)
+app.use('/api/v1/client', ClientReviewRoute)
+app.use('/api/v1/client', ClientCartRoute)
+app.use('/api/v1/client', ClientWishlistRoute)
 
 // -----DashboardRoute
 app.use("/api/v1/dashboard", DashboardCategoryRoute)

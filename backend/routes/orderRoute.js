@@ -17,13 +17,13 @@ const router = express.Router()
 // router.put('/seller/order-status/update/:orderId', orderController.seller_order_status_update)
 
 // ----customer
-router.get('/order/confirm/:orderId', orderController.order_confirm)
-router.get('/home/customer/gat-dashboard-data/:userId', orderController.get_customer_databorad_data)
-router.get('/home/customer/gat-orders/:customerId/:status', orderController.get_orders)
-router.get('/home/customer/gat-order/:orderId', orderController.get_order)
+router.get('/customer/confirm/:orderId', orderController.order_confirm)
+router.get('/customer/gat-dashboard-data/:userId', orderController.get_customer_databorad_data)
+router.get('/customer/gat-orders/:customerId/:status', orderController.get_orders)
+router.get('/customer/gat-order/:orderId', orderController.get_order)
 
-router.post('/home/order/palce-order', orderController.place_order)
-router.post('/order/create-payment', orderController.create_payment)
+router.post('/customer/place-order', orderController.place_order)
+router.post('/customer/create-payment', orderController.create_payment)
 
 
 

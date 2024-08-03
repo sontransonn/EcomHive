@@ -1,4 +1,4 @@
-export class queryProducts {
+class queryUtil {
     products = []
     query = {}
 
@@ -73,3 +73,5 @@ export class queryProducts {
         return this.products.length
     }
 }
+
+export default queryUtil

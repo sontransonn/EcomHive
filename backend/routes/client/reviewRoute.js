@@ -1,14 +1,11 @@
 import express from "express"
 
-import {
-    submit_review,
-    get_reviews
-} from "../../controllers/client/homeController.js"
+import reviewController from "../../controllers/client/reviewController.js"
 
 const router = express.Router()
 
-router.get('/customer/get-reviews/:productId', get_reviews)
+router.get('/get-reviews/:productId', reviewController.get_reviews)
 
-router.post('/customer/submit-review', submit_review)
+router.post('/submit-review', reviewController.submit_review)
 
 export default router

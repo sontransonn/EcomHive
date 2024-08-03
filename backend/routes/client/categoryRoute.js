@@ -1,11 +1,9 @@
 import express from "express"
 
-import {
-    get_categorys,
-} from "../../controllers/client/homeController.js"
+import categoryController from "../../controllers/client/categoryController.js"
 
 const router = express.Router()
 
-router.get('/get-categorys', get_categorys)
+router.get('/get-all-category', categoryController.get_all_category)
 
 export default router

@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-const cardSchema = new mongoose.Schema({
+const cartSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.ObjectId,
         required: true
@@ -17,6 +17,6 @@ const cardSchema = new mongoose.Schema({
     timestamps: true
 })
 
-const CARDS = mongoose.model("cards", cardSchema)
+const CARTS = mongoose.model("carts", cartSchema)
 
-export default CARDS
+export default CARTS

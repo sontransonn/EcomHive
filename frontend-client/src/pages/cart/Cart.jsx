@@ -4,12 +4,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
 import {
-    get_card_products,
-    delete_card_product,
     messageClear,
+    get_products_in_cart,
     quantity_inc,
-    quantity_dec
-} from "../../redux/slices/cardSlice"
+    quantity_dec,
+    delete_product_in_cart,
+} from "../../redux/slices/cartSlice"
 
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
 
@@ -24,17 +24,17 @@ const Cart = () => {
         card_products,
         successMessage, price,
         buy_product_item, shipping_fee, outofstock_products
-    } = useSelector(state => state.card)
+    } = useSelector(state => state.cart)
 
     useEffect(() => {
-        dispatch(get_card_products(userInfo.id))
+        dispatch(get_products_in_cart(userInfo.id))
     }, [])
 
     useEffect(() => {
         if (successMessage) {
             toast.success(successMessage)
             dispatch(messageClear())
-            dispatch(get_card_products(userInfo.id))
+            dispatch(get_products_in_cart(userInfo.id))
 
         }
     }, [successMessage])
@@ -120,7 +120,7 @@ const Cart = () => {
                                                                     <div onClick={() => inc(pt.quantity, pt.productInfo.stock, pt._id)} className='px-3 cursor-pointer'>+</div>
                                                                 </div>
                                                                 <button
-                                                                    onClick={() => dispatch(delete_card_product(pt._id))}
+                                                                    onClick={() => dispatch(delete_product_in_cart(pt._id))}
                                                                     className='px-5 py-[3px] bg-red-500 text-white'
                                                                 >
                                                                     Delete
@@ -160,7 +160,7 @@ const Cart = () => {
                                                                         <div className='px-3'>{p.quantity}</div>
                                                                         <div onClick={() => dec(p.quantity, p.products[0].stock, p._id)} className='px-3 cursor-pointer'>+</div>
                                                                     </div>
-                                                                    <button onClick={() => dispatch(delete_card_product(p._id))} className='px-5 py-[3px] bg-red-500 text-white'>Delete</button>
+                                                                    <button onClick={() => dispatch(delete_product_in_cart(p._id))} className='px-5 py-[3px] bg-red-500 text-white'>Delete</button>
                                                                 </div>
                                                             </div>
                                                         </div>)

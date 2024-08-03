@@ -2,9 +2,8 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
-    get_category,
     get_products
-} from "../../redux/slices/homeSlice"
+} from "../../redux/slices/productSlice"
 
 import MainLayout from '../../layouts/MainLayout'
 import Banner from './components/Banner'
@@ -20,7 +19,7 @@ const HomePage = () => {
         latest_products,
         topRated_products,
         discount_products
-    } = useSelector(state => state.home)
+    } = useSelector(state => state.product)
 
     useEffect(() => {
         dispatch(get_products())

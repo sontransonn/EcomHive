@@ -1,14 +1,9 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
-import {
-  Routes,
-  Route
-} from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 
-import {
-  get_category
-} from "./redux/slices/homeSlice"
+import { get_all_category } from "./redux/slices/categorySlice"
 
 import HomePage from './pages/home/HomePage'
 import ShopPage from './pages/shop/ShopPage'
@@ -24,7 +19,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(get_category())
+    dispatch(get_all_category())
   }, [])
 
   return (
@@ -39,9 +34,7 @@ const App = () => {
         <Route path='/shipping' element={<Shipping />} />
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/login' element={<LoginPage />} />
-
       </Routes>
-
       <Toaster position='top-right' />
     </>
   )

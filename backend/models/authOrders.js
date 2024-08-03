@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-const authSchema = new Schema({
+const authSchema = new mongoose.Schema({
     orderId: {
         type: mongoose.Schema.ObjectId,
         required: true

@@ -2,44 +2,37 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: "http://localhost:5000/api",
+    baseURL: "http://localhost:8080/api/v1/order/customer",
     withCredentials: true
 })
 
 export const place_order = createAsyncThunk(
-    'order/place_order', async ({
-        price,
-        products,
-        shipping_fee,
-        shippingInfo,
-        userId,
-        navigate,
-        items
-    }) => {
-    try {
-        const { data } = await api.post('/home/order/palce-order', {
-            price,
-            products,
-            shipping_fee,
-            shippingInfo,
-            userId,
-            navigate,
-            items,
-        })
-
-        navigate('/payment', {
-            state: {
-                price: price + shipping_fee,
+    'order/place_order',
+    async ({ price, products, shipping_fee, shippingInfo, userId, navigate, items }) => {
+        try {
+            const { data } = await api.post('/place-order', {
+                price,
+                products,
+                shipping_fee,
+                shippingInfo,
+                userId,
+                navigate,
                 items,
-                orderId: data.orderId
-            }
-        })
-        console.log(data)
-        return true
-    } catch (error) {
-        console.log(error.response)
+            })
+
+            navigate('/payment', {
+                state: {
+                    price: price + shipping_fee,
+                    items,
+                    orderId: data.orderId
+                }
+            })
+
+            return true
+        } catch (error) {
+            console.log(error.response)
+        }
     }
-}
 )
 
 export const get_orders = createAsyncThunk(

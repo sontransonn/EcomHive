@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom'
 import { Range } from 'react-range'
 
 import {
-    price_range_product,
-    query_products
-} from "../../redux/slices/homeSlice"
+    price_range_products,
+    get_products_by_query
+} from "../../redux/slices/productSlice"
 
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md'
 import { AiFillStar } from 'react-icons/ai'
@@ -25,8 +25,9 @@ const ShopPage = () => {
     const {
         products,
         totalProduct, latest_products,
-        categories, priceRange, parPage
-    } = useSelector(state => state.home)
+        priceRange, parPage
+    } = useSelector(state => state.product)
+    const { categories } = useSelector(state => state.category)
 
     const [pageNumber, setPageNumber] = useState(1)
     const [styles, setStyles] = useState('grid')
@@ -37,7 +38,7 @@ const ShopPage = () => {
     const [sortPrice, setSortPrice] = useState('')
 
     useEffect(() => {
-        dispatch(price_range_product())
+        dispatch(price_range_products())
     }, [])
 
     useEffect(() => {
@@ -48,7 +49,7 @@ const ShopPage = () => {
 
     useEffect(() => {
         dispatch(
-            query_products({
+            get_products_by_query({
                 low: state.values[0],
                 high: state.values[1],
                 category,
@@ -69,7 +70,7 @@ const ShopPage = () => {
 
     const resetRating = () => {
         setRatingQ('')
-        dispatch(query_products({
+        dispatch(get_products_by_query({
             low: state.values[0],
             high: state.values[1],
             category,

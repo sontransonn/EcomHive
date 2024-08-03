@@ -1,21 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { jwtDecode } from 'jwt-decode'
 import axios from "axios"
 
+import { decodeToken } from '../../utils/tokenUtil'
+
 const api = axios.create({
-    baseURL: "http://localhost:5000/api/v1/auth",
+    baseURL: "http://localhost:8080/api/v1/auth",
     withCredentials: true
 })
 
-const decodeToken = (token) => {
-    if (token) {
-        const userInfo = jwtDecode(token)
-        return userInfo
-    } else {
-        return ''
-    }
+const initialState = {
+    loader: false,
+    userInfo: decodeToken(localStorage.getItem('customerToken')),
+    errorMessage: '',
+    successMessage: ''
 }
 
+// Đăng ký (Customer)
 export const customer_register = createAsyncThunk(
     'auth/customer_register',
     async (info, { rejectWithValue, fulfillWithValue }) => {
@@ -31,6 +31,7 @@ export const customer_register = createAsyncThunk(
     }
 )
 
+// Đăng nhập (Customer)
 export const customer_login = createAsyncThunk(
     'auth/customer_login',
     async (info, { rejectWithValue, fulfillWithValue }) => {
@@ -47,12 +48,7 @@ export const customer_login = createAsyncThunk(
 
 export const authSlice = createSlice({
     name: 'auth',
-    initialState: {
-        loading: false,
-        userInfo: decodeToken(localStorage.getItem('customerToken')),
-        errorMessage: '',
-        successMessage: ''
-    },
+    initialState,
     reducers: {
         messageClear: (state, _) => {
             state.errorMessage = ''
@@ -72,10 +68,9 @@ export const authSlice = createSlice({
                 state.loader = false;
             })
             .addCase(customer_register.fulfilled, (state, { payload }) => {
-                const userInfo = decodeToken(payload.token);
                 state.successMessage = payload.message;
                 state.loader = false;
-                state.userInfo = userInfo;
+                state.userInfo = decodeToken(payload.token);
             })
             .addCase(customer_login.pending, (state) => {
                 state.loader = true;
@@ -85,10 +80,9 @@ export const authSlice = createSlice({
                 state.loader = false;
             })
             .addCase(customer_login.fulfilled, (state, { payload }) => {
-                const userInfo = decodeToken(payload.token);
                 state.successMessage = payload.message;
                 state.loader = false;
-                state.userInfo = userInfo;
+                state.userInfo = decodeToken(payload.token);
             });
     }
 })

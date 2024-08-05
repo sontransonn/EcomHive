@@ -33,7 +33,48 @@ class productController {
 
     // Lấy ra sản phẩm theo slug
     static get_product_by_slug = async (req, res) => {
+        try {
+            const { slug } = req.params
 
+            const product = await PRODUCTS.findOne({ slug })
+
+            const relatedProducts = await PRODUCTS.find({
+                $and: [{
+                    _id: {
+                        $ne: product.id
+                    }
+                },
+                {
+                    category: {
+                        $eq: product.category
+                    }
+                }
+                ]
+            }).limit(20)
+
+            const moreProducts = await PRODUCTS.find({
+                $and: [{
+                    _id: {
+                        $ne: product.id
+                    }
+                },
+                {
+                    sellerId: {
+                        $eq: product.sellerId
+                    }
+                }
+                ]
+            }).limit(3)
+
+            return res.status(200).json({
+                product,
+                relatedProducts,
+                moreProducts
+            })
+        } catch (error) {
+            console.log(error.message)
+            res.status(500).json({ error: error })
+        }
     }
 
     // Lấy ra các sản phẩm mới nhất và phạm vi giá của các sản phẩm 

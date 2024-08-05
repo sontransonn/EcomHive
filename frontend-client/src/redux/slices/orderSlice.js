@@ -6,6 +6,58 @@ const api = axios.create({
     withCredentials: true
 })
 
+const initialState = {
+    recentOrders: [],
+    myOrders: [],
+    errorMessage: '',
+    successMessage: '',
+    myOrder: {},
+    totalOrder: 0,
+    pendingOrder: 0,
+    cancelledOrder: 0
+}
+
+// Lấy ra các order theo status
+export const get_orders = createAsyncThunk(
+    'order/get_orders',
+    async ({ customerId, status }, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.get(`/gat-orders/${customerId}/${status}`)
+
+            return fulfillWithValue(data)
+        } catch (error) {
+            console.log(error.response)
+        }
+    }
+)
+
+// Lấy ra order theo orderId
+export const get_order = createAsyncThunk(
+    'order/get_order',
+    async (orderId, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.get(`/gat-order/${orderId}`)
+
+            return fulfillWithValue(data)
+        } catch (error) {
+            console.log(error.response)
+        }
+    }
+)
+
+export const get_dashboard_index_data = createAsyncThunk(
+    'dashboard/get_dashboard_index_data',
+    async (userId, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.get(`/gat-dashboard-data/${userId}`)
+
+            return fulfillWithValue(data)
+        } catch (error) {
+            console.log(error.response.data)
+        }
+    }
+)
+
 export const place_order = createAsyncThunk(
     'order/place_order',
     async ({ price, products, shipping_fee, shippingInfo, userId, navigate, items }) => {
@@ -35,51 +87,9 @@ export const place_order = createAsyncThunk(
     }
 )
 
-export const get_orders = createAsyncThunk(
-    'order/get_orders',
-    async ({
-        customerId,
-        status
-    }, {
-        rejectWithValue,
-        fulfillWithValue
-    }) => {
-        try {
-            const {
-                data
-            } = await api.get(`/home/customer/gat-orders/${customerId}/${status}`)
-            return fulfillWithValue(data)
-        } catch (error) {
-            console.log(error.response)
-        }
-    }
-)
-
-export const get_order = createAsyncThunk(
-    'order/get_order',
-    async (orderId, {
-        rejectWithValue,
-        fulfillWithValue
-    }) => {
-        try {
-            const {
-                data
-            } = await api.get(`/home/customer/gat-order/${orderId}`)
-            return fulfillWithValue(data)
-        } catch (error) {
-            console.log(error.response)
-        }
-    }
-)
-
 export const orderSlice = createSlice({
     name: 'order',
-    initialState: {
-        myOrders: [],
-        errorMessage: '',
-        successMessage: '',
-        myOrder: {}
-    },
+    initialState,
     reducers: {
         messageClear: (state, _) => {
             state.errorMessage = ''
@@ -93,6 +103,12 @@ export const orderSlice = createSlice({
             })
             .addCase(get_order.fulfilled, (state, { payload }) => {
                 state.myOrder = payload.order
+            })
+            .addCase(get_dashboard_index_data.fulfilled, (state, { payload }) => {
+                state.totalOrder = payload.totalOrder
+                state.pendingOrder = payload.pendingOrder
+                state.cancelledOrder = payload.cancelledOrder
+                state.recentOrders = payload.recentOrders
             })
 })
 

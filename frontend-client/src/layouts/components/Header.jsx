@@ -19,7 +19,8 @@ const Header = () => {
 
     const { categories } = useSelector(state => state.category)
     const { userInfo } = useSelector(state => state.auth)
-    const { card_product_count, wishlist_count } = useSelector(state => state.cart)
+    const { card_product_count } = useSelector(state => state.cart)
+    const { wishlist_count } = useSelector(state => state.wishlist)
 
     const [showShidebar, setShowShidebar] = useState(true);
     const [categoryShow, setCategoryShow] = useState(true)

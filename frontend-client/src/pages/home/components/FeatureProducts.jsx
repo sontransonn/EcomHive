@@ -3,11 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
-import {
-    add_product_to_cart,
-    messageClear,
-} from "../../../redux/slices/cartSlice"
-import { add_product_to_wishlist } from "../../../redux/slices/wishlistSlice"
+import { add_product_to_cart, messageClear as messageClearOfCart } from "../../../redux/slices/cartSlice"
+import { add_product_to_wishlist, messageClear as messageClearOfWishlist } from "../../../redux/slices/wishlistSlice"
 
 import { AiFillHeart, AiOutlineShoppingCart } from 'react-icons/ai'
 import { FaEye } from 'react-icons/fa'
@@ -19,18 +16,30 @@ const FeatureProducts = ({ products }) => {
     const dispatch = useDispatch()
 
     const { userInfo } = useSelector(state => state.auth)
-    const { successMessage, errorMessage } = useSelector(state => state.cart)
+    const { successMessage: successMessageOfWishlist, errorMessage: errorMessageOfWishlist } = useSelector(state => state.wishlist)
+    const { successMessage: successMessageOfCart, errorMessage: errorMessageOfCart } = useSelector(state => state.cart)
 
     useEffect(() => {
-        if (successMessage) {
-            toast.success(successMessage)
-            dispatch(messageClear())
+        if (successMessageOfWishlist) {
+            toast.success(successMessageOfWishlist)
+            dispatch(messageClearOfWishlist())
         }
-        if (errorMessage) {
-            toast.error(errorMessage)
-            dispatch(messageClear())
+        if (errorMessageOfWishlist) {
+            toast.error(errorMessageOfWishlist)
+            dispatch(messageClearOfWishlist())
         }
-    }, [errorMessage, successMessage])
+    }, [errorMessageOfWishlist, successMessageOfWishlist])
+
+    useEffect(() => {
+        if (successMessageOfCart) {
+            toast.success(successMessageOfCart)
+            dispatch(messageClearOfCart())
+        }
+        if (errorMessageOfCart) {
+            toast.error(errorMessageOfCart)
+            dispatch(messageClearOfCart())
+        }
+    }, [errorMessageOfCart, successMessageOfCart])
 
     const handleAddProductToCart = (id) => {
         if (userInfo) {

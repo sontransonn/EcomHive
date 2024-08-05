@@ -6,15 +6,12 @@ class cartController {
     // Lấy ra các sản phẩm trong giỏ hàng
     static get_products_in_cart = async (req, res) => {
         try {
-            const co = 5;
+            const co = 5; // Hệ số giảm giá thêm
             const { userId } = req.params
 
+            // Truy vấn giỏ hàng của người dùng và nối với thông tin sản phẩm từ collection 'products'
             const card_products = await CARTS.aggregate([{
-                $match: {
-                    userId: {
-                        $eq: new mongo.ObjectId(userId)
-                    }
-                }
+                $match: { userId: { $eq: new mongo.ObjectId(userId) } }
             },
             {
                 $lookup: {
@@ -25,19 +22,20 @@ class cartController {
                 }
             }])
 
-            let buy_product_item = 0
-            let calculatePrice = 0;
-            let card_product_count = 0;
+            let buy_product_item = 0 // Tổng số lượng sản phẩm người dùng có thể mua
+            let calculatePrice = 0; // Tổng giá trị sản phẩm trong giỏ hàng
+            let card_product_count = 0; // Tổng số lượng sản phẩm trong giỏ hàng
+
+            // Lọc sản phẩm hết hàng
             const outOfStockProduct = card_products.filter(p => p.products[0].stock < p.quantity)
             for (let i = 0; i < outOfStockProduct.length; i++) {
                 card_product_count = card_product_count + outOfStockProduct[i].quantity
             }
 
+            // Lọc sản phẩm còn hàng
             const stockProduct = card_products.filter(p => p.products[0].stock >= p.quantity)
             for (let i = 0; i < stockProduct.length; i++) {
-                const {
-                    quantity
-                } = stockProduct[i]
+                const { quantity } = stockProduct[i]
                 card_product_count = card_product_count + quantity
                 buy_product_item = buy_product_item + quantity
                 const {
@@ -51,6 +49,7 @@ class cartController {
                 }
             }
 
+            // Nhóm sản phẩm theo người bán và tính toán giá
             let p = []
             let unique = [...new Set(stockProduct.map(p => p.products[0].sellerId.toString()))]
             for (let i = 0; i < unique.length; i++) {
@@ -90,12 +89,12 @@ class cartController {
             }
 
             return res.status(200).json({
-                card_products: p,
-                price: calculatePrice,
-                card_product_count,
-                shipping_fee: 85 * p.length,
-                outOfStockProduct,
-                buy_product_item
+                card_products: p, // Danh sách sản phẩm trong giỏ hàng, nhóm theo người bán
+                price: calculatePrice, // Tổng giá trị sản phẩm trong giỏ hàng
+                card_product_count,  // Tổng số lượng sản phẩm trong giỏ hàng
+                shipping_fee: 85 * p.length, // Phí vận chuyển
+                outOfStockProduct, // Danh sách sản phẩm hết hàng
+                buy_product_item  // Tổng số lượng sản phẩm người dùng có thể mua
             })
         } catch (error) {
             console.log(error);

@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-const authSchema = new mongoose.Schema({
+const authorSchema = new mongoose.Schema({
     orderId: {
         type: mongoose.Schema.ObjectId,
         required: true
@@ -37,6 +37,6 @@ const authSchema = new mongoose.Schema({
     timestamps: true
 })
 
-const AUTHORDERS = mongoose.model('authorOrders', authSchema)
+const AUTHORORDERS = mongoose.model('authorOrders', authorSchema)
 
-export default AUTHORDERS
+export default AUTHORORDERS

@@ -19,6 +19,7 @@ export const get_products_in_wishlist = createAsyncThunk(
     async (userId, { rejectWithValue, fulfillWithValue }) => {
         try {
             const { data } = await api.get(`/get-products-in-wishlist/${userId}`)
+
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -45,7 +46,7 @@ export const delete_product_in_wishlist = createAsyncThunk(
     'wishlist/delete_product_in_wishlist',
     async (wishlistId, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { data } = await api.delete(`/product/delete-product-in-wishlist/${wishlistId}`)
+            const { data } = await api.delete(`/delete-product-in-wishlist/${wishlistId}`)
 
             return fulfillWithValue(data)
         } catch (error) {

@@ -59,6 +59,7 @@ export const get_product_by_slug = createAsyncThunk(
         try {
             const { data } = await api.get(`/get-product-by-slug/${slug}`)
 
+            console.log(data);
             return fulfillWithValue(data)
         } catch (error) {
             console.log(error.response)
@@ -103,7 +104,7 @@ export const productSlice = createSlice({
                 state.parPage = action.payload.parPage;
             })
             .addCase(get_product_by_slug.fulfilled, (state, action) => {
-                state.products = action.payload.product;
+                state.product = action.payload.product;
                 state.relatedProducts = action.payload.relatedProducts;
                 state.moreProducts = action.payload.moreProducts;
             })

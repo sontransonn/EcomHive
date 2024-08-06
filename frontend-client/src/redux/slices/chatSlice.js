@@ -20,7 +20,6 @@ export const add_friend = createAsyncThunk(
         try {
             const { data } = await api.post('/add-customer-friend', info)
 
-            console.log(data)
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)

@@ -32,10 +32,12 @@ const Chat = () => {
 
     const scrollRef = useRef()
 
+    // Xử lý socket thêm thông tin customer vào mảng "allCustomer" lưu trữ trên backend
     useEffect(() => {
         socket.emit('add_user', userInfo.id, userInfo)
     }, [])
 
+    // Thêm thông tin seller vào danh sách bạn bè
     useEffect(() => {
         dispatch(add_friend({
             sellerId: sellerId || "",
@@ -43,6 +45,15 @@ const Chat = () => {
         }))
     }, [sellerId])
 
+    // Xử lý socket gửi message tới seller
+    useEffect(() => {
+        if (successMessage) {
+            socket.emit('send_customer_message', fd_messages[fd_messages.length - 1])
+            dispatch(messageClear())
+        }
+    }, [successMessage])
+
+    // Xử lý socket khi có message từ seller gửi tới và lấy ra danh sách seller đang hoạt động
     useEffect(() => {
         socket.on('seller_message', msg => {
             setReceverMessage(msg)
@@ -52,15 +63,8 @@ const Chat = () => {
         })
     }, [])
 
+    // Cập nhật lại messages
     useEffect(() => {
-        if (successMessage) {
-            socket.emit('send_customer_message', fd_messages[fd_messages.length - 1])
-            dispatch(messageClear())
-        }
-    }, [successMessage])
-
-    useEffect(() => {
-        console.log(receverMessage)
         if (receverMessage) {
             if (sellerId === receverMessage.senderId && userInfo.id === receverMessage.receverId) {
                 dispatch(updateMessage(receverMessage))
@@ -71,6 +75,7 @@ const Chat = () => {
         }
     }, [receverMessage])
 
+    // Xử lý scroll
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [fd_messages])

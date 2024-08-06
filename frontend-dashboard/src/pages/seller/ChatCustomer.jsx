@@ -36,16 +36,50 @@ const ChatCustomer = () => {
 
     const scrollRef = useRef()
 
+    // Lấy ra danh sách các customer đang chat
     useEffect(() => {
         dispatch(get_customers(userInfo._id))
     }, [])
 
+    // Lấy ra tất cả message của customerId
     useEffect(() => {
         if (customerId) {
             dispatch(get_customer_message(customerId))
         }
     }, [customerId])
 
+    // Xử lý socket gửi message tới customer
+    useEffect(() => {
+        if (successMessage) {
+            socket.emit('send_seller_message', messages[messages.length - 1])
+            dispatch(messageClear())
+        }
+    }, [successMessage])
+
+    // Xử lý socket khi có message từ customer gửi tới và lấy ra danh sách customer đang hoạt động
+    useEffect(() => {
+        socket.on('customer_message', msg => {
+            setReceverMessage(msg)
+        })
+        // socket.on('activeSeller', (sellers) => {
+        //     setActiveSeller(sellers)
+        // })
+    }, [])
+
+    // Cập nhật lại messages
+    useEffect(() => {
+        if (receverMessage) {
+            if (customerId === receverMessage.senderId && userInfo._id === receverMessage.receverId) {
+                dispatch(updateMessage(receverMessage))
+            }
+            else {
+                toast.success(receverMessage.senderName + " " + "send a message")
+                dispatch(messageClear())
+            }
+        }
+    }, [receverMessage])
+
+    // Xử lý scroll
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [messages])
@@ -74,7 +108,11 @@ const ChatCustomer = () => {
                             {
                                 customers.map((c, i) => <Link key={i} to={`/seller/dashboard/chat-customer/${c.fdId}`} className={`h-[60px] flex justify-start gap-2 items-center text-white px-2 py-2 rounded-sm cursor-pointer bg-slate-700`}>
                                     <div className='relative'>
-                                        <img className='w-[38px] h-[38px] border-white border-2 max-w-[38px] p-[2px] rounded-full' src="http://localhost:3000/images/admin.jpg" alt="" />
+                                        <img
+                                            className='w-[38px] h-[38px] border-white border-2 max-w-[38px] p-[2px] rounded-full'
+                                            src="http://localhost:5173/images/admin.jpg"
+                                            alt=""
+                                        />
                                         {
                                             activeCustomer.some((a => a.customerId === c.fdId)) && <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
                                         }
@@ -93,10 +131,14 @@ const ChatCustomer = () => {
                             {
                                 customerId && <div className='flex justify-start items-center gap-3'>
                                     <div className='relative'>
-                                        <img className='w-[42px] h-[42px] border-green-500 border-2 max-w-[42px] p-[2px] rounded-full' src="http://localhost:3001/images/admin.jpg" alt="" />
-                                        {/* {
+                                        <img
+                                            className='w-[42px] h-[42px] border-green-500 border-2 max-w-[42px] p-[2px] rounded-full'
+                                            src="http://localhost:5173/images/admin.jpg"
+                                            alt=""
+                                        />
+                                        {
                                             activeCustomer.some((a => a.customerId === currentCustomer._id)) && <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
-                                        } */}
+                                        }
                                     </div>
                                     <h2 className='text-base text-white font-semibold'>{currentCustomer.name}</h2>
                                 </div>
@@ -114,7 +156,11 @@ const ChatCustomer = () => {
                                                 <div ref={scrollRef} key={i} className='w-full flex justify-start items-center'>
                                                     <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
                                                         <div>
-                                                            <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="http://localhost:3001/images/admin.jpg" alt="" />
+                                                            <img
+                                                                className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]'
+                                                                src="http://localhost:5173/images/admin.jpg"
+                                                                alt=""
+                                                            />
                                                         </div>
                                                         <div className='flex justify-center items-start flex-col w-full bg-orange-500 shadow-lg shadow-orange-500/50 text-white py-1 px-2 rounded-sm'>
                                                             <span>{m.message}</span>
@@ -130,7 +176,11 @@ const ChatCustomer = () => {
                                                             <span>{m.message}</span>
                                                         </div>
                                                         <div>
-                                                            <img className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]' src="http://localhost:3001/images/admin.jpg" alt="" />
+                                                            <img
+                                                                className='w-[38px] h-[38px] border-2 border-white rounded-full max-w-[38px] p-[3px]'
+                                                                src="http://localhost:5173/images/admin.jpg"
+                                                                alt=""
+                                                            />
                                                         </div>
                                                     </div>
                                                 </div>

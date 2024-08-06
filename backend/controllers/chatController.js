@@ -218,8 +218,55 @@ class chatController {
         }
     }
 
+    // Gửi tin nhắn từ seller đến customer
     static seller_message_add = async (req, res) => {
+        try {
+            const { senderId, text, receverId, name } = req.body
 
+            const message = await SC_MESSAGES.create({
+                senderId: senderId,
+                senderName: name,
+                receverId: receverId,
+                message: text
+            })
+
+            const data = await FRIENDS.findOne({ myId: senderId })
+
+            let myFriends = data.myFriends
+            let index = myFriends.findIndex(f => f.fdId === receverId)
+
+            while (index > 0) {
+                let temp = myFriends[index]
+                myFriends[index] = myFriends[index - 1]
+                myFriends[index - 1] = temp
+                index--
+            }
+            await FRIENDS.updateOne({ myId: senderId }, {
+                myFriends
+            })
+
+            const data1 = await FRIENDS.findOne({ myId: receverId })
+
+            let myFriends1 = data1.myFriends
+            let index1 = myFriends1.findIndex(f => f.fdId === senderId)
+
+            while (index1 > 0) {
+                let temp1 = myFriends1[index1]
+                myFriends1[index1] = myFriends[index1 - 1]
+                myFriends1[index1 - 1] = temp1
+                index1--
+            }
+            await FRIENDS.updateOne({ myId: receverId }, {
+                myFriends1
+            })
+
+            return res.status(201).json({
+                message
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
     }
 }
 

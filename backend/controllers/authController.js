@@ -6,7 +6,7 @@ import cloudinary from "../configs/cloudinaryConfig.js"
 import ADMINS from "../models/adminsModel.js";
 import SELLERS from "../models/sellersModel.js";
 import CUSTOMERS from "../models/customersModel.js";
-import SELLER_CUSTOMERS from "../models/chat/sellerCustomerModel.js";
+import FRIENDS from "../models/friendsModel.js";
 
 import { generateToken } from "../utils/tokenUtil.js";
 
@@ -100,7 +100,7 @@ class authController {
                 shopInfo: {}
             })
 
-            await SELLER_CUSTOMERS.create({
+            await FRIENDS.create({
                 myId: newSeller.id
             })
 
@@ -187,8 +187,8 @@ class authController {
                 method: 'menualy'
             })
 
-            await SELLER_CUSTOMERS.create({
-                myId: createCustomer.id
+            await FRIENDS.create({
+                myId: newCustomer.id
             })
 
             const token = await generateToken({

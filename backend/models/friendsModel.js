@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-const sellerCustomerSchema = new mongoose.Schema({
+const friendSchema = new mongoose.Schema({
     myId: {
         type: String,
         required: true
@@ -15,6 +15,6 @@ const sellerCustomerSchema = new mongoose.Schema({
     }
 )
 
-const SELLER_CUSTOMERS = mongoose.model("seller_customers", sellerCustomerSchema)
+const FRIENDS = mongoose.model("friends", friendSchema)
 
-export default SELLER_CUSTOMERS
+export default FRIENDS

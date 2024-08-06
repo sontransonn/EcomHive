@@ -59,7 +59,6 @@ export const get_product_by_slug = createAsyncThunk(
         try {
             const { data } = await api.get(`/get-product-by-slug/${slug}`)
 
-            console.log(data);
             return fulfillWithValue(data)
         } catch (error) {
             console.log(error.response)

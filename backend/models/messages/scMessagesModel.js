@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-const sellerCustomerSchema = new mongoose.Schema({
+const scMessageSchema = new mongoose.Schema({
     senderName: {
         type: String,
         required: true
@@ -27,6 +27,6 @@ const sellerCustomerSchema = new mongoose.Schema({
     }
 )
 
-const SELLER_CUSTOMER_MESSAGES = mongoose.model("seller_customer_messages", sellerCustomerSchema)
+const SC_MESSAGES = mongoose.model("sc_messages", scMessageSchema)
 
-export default SELLER_CUSTOMER_MESSAGES
+export default SC_MESSAGES

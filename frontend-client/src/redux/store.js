@@ -8,6 +8,7 @@ import productSlice from './slices/productSlice';
 import cartReducer from './slices/cartSlice';
 import wishlistReducere from './slices/wishlistSlice';
 import orderReducer from './slices/orderSlice';
+import chatReducer from './slices/chatSlice';
 
 const store = configureStore({
     reducer: {
@@ -18,7 +19,8 @@ const store = configureStore({
         product: productSlice,
         cart: cartReducer,
         wishlist: wishlistReducere,
-        order: orderReducer
+        order: orderReducer,
+        chat: chatReducer
     },
 
     middleware: getDefaultMiddleware => {

@@ -17,6 +17,7 @@ import { AiFillGithub, AiOutlineTwitter } from 'react-icons/ai'
 
 import MainLayout from "../../layouts/MainLayout"
 import Rating from "../../components/Rating"
+import Reviews from '../../components/Reviews'
 
 const responsive = {
     superLargeDesktop: {
@@ -133,7 +134,6 @@ const ProductDetails = () => {
         } else {
             navigate('/login')
         }
-
     }
 
     const buy = () => {
@@ -224,7 +224,7 @@ const ProductDetails = () => {
                             </div>
                             <div className='flex justify-start items-center gap-4'>
                                 <div className='flex text-xl'>
-                                    <Rating ratings={product.rating} />
+                                    <Rating rating={product.rating} />
                                 </div>
                                 <span className='text-green-500'>(23 reviews)</span>
                             </div>
@@ -304,9 +304,9 @@ const ProductDetails = () => {
                                     <button onClick={() => setState('description')} className={`py-1 px-5 hover:text-white hover:bg-green-500 ${state === 'description' ? 'bg-green-500 text-white' : 'bg-slate-200 text-slate-700'} rounded-sm`}>Description</button>
                                 </div>
                                 <div>
-                                    {/* {
+                                    {
                                         state === 'reviews' ? <Reviews product={product} /> : <p className='py-5 text-slate-600'>{product.description}</p>
-                                    } */}
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -330,7 +330,7 @@ const ProductDetails = () => {
                                                     <div className='flex gap-2'>
                                                         <h2 className='text-[#6699ff] text-lg font-bold'>${p.price}</h2>
                                                         <div className='flex items-center gap-2'>
-                                                            <Rating ratings={p.rating} />
+                                                            <Rating rating={p.rating} />
                                                         </div>
                                                     </div>
                                                 </Link>
@@ -386,7 +386,7 @@ const ProductDetails = () => {
                                                     <div className='flex justify-start items-center gap-3'>
                                                         <h2 className='text-[#6699ff] text-lg font-bold'>${p.price}</h2>
                                                         <div className='flex'>
-                                                            <Rating ratings={p.rating} />
+                                                            <Rating rating={p.rating} />
                                                         </div>
                                                     </div>
                                                 </div>

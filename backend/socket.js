@@ -48,12 +48,14 @@ const initSocket = server => {
     io.on('connection', soc => {
         console.log('Socket server is connected...');
 
+        // Thêm customer vào allCustomer
         soc.on('add_user', (customerId, userInfo) => {
             addUser(customerId, soc.id, userInfo);
             io.emit('activeSeller', allSeller);
             io.emit('activeCustomer', allCustomer);
         });
 
+        // Thêm customer vào allSeller
         soc.on('add_seller', (sellerId, userInfo) => {
             addSeller(sellerId, soc.id, userInfo);
             io.emit('activeSeller', allSeller);

@@ -44,6 +44,34 @@ const Chat = () => {
     }, [sellerId])
 
     useEffect(() => {
+        socket.on('seller_message', msg => {
+            setReceverMessage(msg)
+        })
+        socket.on('activeSeller', (sellers) => {
+            setActiveSeller(sellers)
+        })
+    }, [])
+
+    useEffect(() => {
+        if (successMessage) {
+            socket.emit('send_customer_message', fd_messages[fd_messages.length - 1])
+            dispatch(messageClear())
+        }
+    }, [successMessage])
+
+    useEffect(() => {
+        console.log(receverMessage)
+        if (receverMessage) {
+            if (sellerId === receverMessage.senderId && userInfo.id === receverMessage.receverId) {
+                dispatch(updateMessage(receverMessage))
+            } else {
+                toast.success(receverMessage.senderName + " " + "send a message")
+                dispatch(messageClear())
+            }
+        }
+    }, [receverMessage])
+
+    useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: 'smooth' })
     }, [fd_messages])
 

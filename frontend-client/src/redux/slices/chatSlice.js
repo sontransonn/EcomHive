@@ -28,11 +28,12 @@ export const add_friend = createAsyncThunk(
     }
 )
 
+// Gửi tin nhắn từ customer đến seller
 export const send_message = createAsyncThunk(
     'chat/send_message',
     async (info, { fulfillWithValue, rejectWithValue }) => {
         try {
-            const { data } = await api.post('/send-message-to-seller', info)
+            const { data } = await api.post('/send-message-from-customer-to-seller', info)
 
             console.log(data)
             return fulfillWithValue(data)

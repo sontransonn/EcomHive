@@ -7,11 +7,11 @@ const asMessageSchema = new mongoose.Schema({
     },
     senderId: {
         type: String,
-        required: true
+        default: ''
     },
     receverId: {
         type: String,
-        required: true
+        default: ''
     },
     message: {
         type: String,

@@ -268,6 +268,120 @@ class chatController {
             res.status(500).json({ error: error })
         }
     }
+
+    static get_sellers = async (req, res) => {
+        try {
+            const sellers = await SELLERS.find({})
+
+            return res.status(200).json({
+                sellers
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
+
+    // Thêm message vào "AS_MESSAGES"
+    static seller_admin_message_insert = async (req, res) => {
+        try {
+            const { senderId, receverId, message, senderName } = req.body
+
+            const messageData = await AS_MESSAGES.create({
+                senderId,
+                receverId,
+                senderName,
+                message
+            })
+
+            return res.status(200).json({
+                message: messageData
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
+
+    static get_admin_messages = async (req, res) => {
+        try {
+            const { receverId } = req.params;
+            const id = ""
+
+            const messages = await AS_MESSAGES.find({
+                $or: [
+                    {
+                        $and: [{
+                            receverId: { $eq: receverId }
+                        }, {
+                            senderId: {
+                                $eq: id
+                            }
+                        }]
+                    },
+                    {
+                        $and: [{
+                            receverId: { $eq: id }
+                        }, {
+                            senderId: {
+                                $eq: receverId
+                            }
+                        }]
+                    }
+                ]
+            })
+
+            let currentSeller = {}
+            if (receverId) {
+                currentSeller = await SELLERS.findById(receverId)
+            }
+
+            return res.status(200).json({
+                messages,
+                currentSeller
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
+
+    static get_seller_messages = async (req, res) => {
+        try {
+            const receverId = ""
+            const { id } = req
+
+            const messages = await AS_MESSAGES.find({
+                $or: [
+                    {
+                        $and: [{
+                            receverId: { $eq: receverId }
+                        }, {
+                            senderId: {
+                                $eq: id
+                            }
+                        }]
+                    },
+                    {
+                        $and: [{
+                            receverId: { $eq: id }
+                        }, {
+                            senderId: {
+                                $eq: receverId
+                            }
+                        }]
+                    }
+                ]
+            })
+
+            return res.status(200).json({
+                messages
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
 }
 
 export default chatController

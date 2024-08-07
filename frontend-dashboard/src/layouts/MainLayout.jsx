@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 
+import {
+    updateCustomer,
+    updateSellers,
+    activeStatus_update
+} from "../redux/slices/chatSlice"
+
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 
@@ -21,6 +27,18 @@ const MainLayout = () => {
             socket.emit('add_admin', userInfo)
         }
     }, [userInfo])
+
+    useEffect(() => {
+        socket.on('activeCustomer', (customers) => {
+            dispatch(updateCustomer(customers))
+        })
+        socket.on('activeSeller', (sellers) => {
+            dispatch(updateSellers(sellers))
+        })
+        socket.on('activeAdmin', (data) => {
+            dispatch(activeStatus_update(data))
+        })
+    }, [])
 
     return (
         <div className='bg-[#161d31] w-full min-h-screen'>

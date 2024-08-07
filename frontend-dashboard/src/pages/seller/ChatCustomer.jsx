@@ -56,14 +56,11 @@ const ChatCustomer = () => {
         }
     }, [successMessage])
 
-    // Xử lý socket khi có message từ customer gửi tới và lấy ra danh sách customer đang hoạt động
+    // Xử lý socket khi có message từ customer gửi tới 
     useEffect(() => {
         socket.on('customer_message', msg => {
             setReceverMessage(msg)
         })
-        // socket.on('activeSeller', (sellers) => {
-        //     setActiveSeller(sellers)
-        // })
     }, [])
 
     // Cập nhật lại messages

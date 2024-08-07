@@ -10,7 +10,7 @@ const DiscountProducts = lazy(() => import("../../pages/seller/DiscountProducts"
 const Orders = lazy(() => import("../../pages/seller/Orders"))
 const Payments = lazy(() => import("../../pages/seller/Payments"))
 const ChatCustomer = lazy(() => import("../../pages/seller/ChatCustomer"))
-const ChatSupport = lazy(() => import("../../pages/seller/ChatSupport"))
+const ChatWithAdmin = lazy(() => import("../../pages/seller/ChatWithAdmin"))
 const SellerProfile = lazy(() => import("../../pages/seller/SellerProfile"))
 
 const sellerRoutes = [
@@ -84,12 +84,12 @@ const sellerRoutes = [
         role: 'seller',
         status: 'active'
     },
-    // {
-    //     path: '/seller/dashboard/chat-support',
-    //     element: <SellerToAdmin />,
-    //     role: 'seller',
-    //     visibility: ['active', 'deactive', 'pending']
-    // },
+    {
+        path: '/seller/dashboard/chat-support',
+        element: <ChatWithAdmin />,
+        role: 'seller',
+        visibility: ['active', 'deactive', 'pending']
+    },
     {
         path: '/seller/dashboard/profile',
         element: <SellerProfile />,

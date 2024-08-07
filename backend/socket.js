@@ -55,7 +55,7 @@ const initSocket = server => {
             io.emit('activeCustomer', allCustomer);
         });
 
-        // Thêm customer vào allSeller
+        // Thêm seller vào allSeller
         soc.on('add_seller', (sellerId, userInfo) => {
             addSeller(sellerId, soc.id, userInfo);
             io.emit('activeSeller', allSeller);

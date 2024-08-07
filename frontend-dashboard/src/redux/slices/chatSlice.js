@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from "axios"
 
 const api = axios.create({
-    baseURL: "http://localhost:8080/api/v1/chat/seller",
+    baseURL: "http://localhost:8080/api/v1/chat",
     withCredentials: true
 })
 
@@ -26,7 +26,7 @@ export const get_customers = createAsyncThunk(
     'chat/get_customers',
     async (sellerId, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { data } = await api.get(`/get-customers/${sellerId}`, { withCredentials: true })
+            const { data } = await api.get(`/seller/get-customers/${sellerId}`, { withCredentials: true })
 
             return fulfillWithValue(data)
         } catch (error) {
@@ -39,7 +39,7 @@ export const get_customer_message = createAsyncThunk(
     'chat/get_customer_message',
     async (customerId, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { data } = await api.get(`/get-customer-message/${customerId}`, { withCredentials: true })
+            const { data } = await api.get(`/seller/get-customer-message/${customerId}`, { withCredentials: true })
 
             console.log(data);
             return fulfillWithValue(data)
@@ -53,7 +53,7 @@ export const send_message = createAsyncThunk(
     'chat/send_message',
     async (info, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { data } = await api.post(`/send-message-to-customer`, info, { withCredentials: true })
+            const { data } = await api.post(`/seller/send-message-to-customer`, info, { withCredentials: true })
 
             return fulfillWithValue(data)
         } catch (error) {
@@ -66,8 +66,8 @@ export const get_sellers = createAsyncThunk(
     'chat/get_sellers',
     async (_, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { data } = await api.get(`/chat/admin/get-sellers`, { withCredentials: true })
-            console.log(data)
+            const { data } = await api.get(`/admin/get-sellers`, { withCredentials: true })
+
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -79,7 +79,8 @@ export const send_message_seller_admin = createAsyncThunk(
     'chat/send_message_seller_admin',
     async (info, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { data } = await api.post(`/chat/message-send-seller-admin`, info, { withCredentials: true })
+            const { data } = await api.post(`/message-send-seller-admin`, info, { withCredentials: true })
+
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -87,11 +88,14 @@ export const send_message_seller_admin = createAsyncThunk(
     }
 )
 
+// Lấy ra tất cả tin nhắn của admin với seller với sellerId và currentSeller
 export const get_admin_message = createAsyncThunk(
     'chat/get_admin_message',
     async (receverId, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { data } = await api.get(`/chat/get-admin-messages/${receverId}`, { withCredentials: true })
+            const { data } = await api.get(`/get-admin-messages/${receverId}`, { withCredentials: true })
+
+            console.log(data);
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)
@@ -103,7 +107,8 @@ export const get_seller_message = createAsyncThunk(
     'chat/get_seller_message',
     async (receverId, { rejectWithValue, fulfillWithValue }) => {
         try {
-            const { data } = await api.get(`/chat/get-seller-messages`, { withCredentials: true })
+            const { data } = await api.get(`/get-seller-messages`, { withCredentials: true })
+
             return fulfillWithValue(data)
         } catch (error) {
             return rejectWithValue(error.response.data)

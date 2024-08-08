@@ -27,6 +27,7 @@ const AdminLogin = () => {
         password: ''
     })
 
+    // Xử lý sự kiện sau khi đăng nhập thành công hoặc thất bại
     useEffect(() => {
         if (errorMessage) {
             toast.error(errorMessage)

@@ -8,6 +8,7 @@ const AllProduct = lazy(() => import("../../pages/seller/AllProduct"))
 const EditProduct = lazy(() => import("../../pages/seller/EditProduct"))
 const DiscountProducts = lazy(() => import("../../pages/seller/DiscountProducts"))
 const Orders = lazy(() => import("../../pages/seller/Orders"))
+const OrderDetails = lazy(() => import("../../pages/seller/OrderDetails"))
 const Payments = lazy(() => import("../../pages/seller/Payments"))
 const ChatCustomer = lazy(() => import("../../pages/seller/ChatCustomer"))
 const ChatWithAdmin = lazy(() => import("../../pages/seller/ChatWithAdmin"))
@@ -43,14 +44,14 @@ const sellerRoutes = [
         status: 'active'
     },
     {
-        path: '/seller/dashboard/edit-product/:productId',
-        element: <EditProduct />,
+        path: '/seller/dashboard/discount-products',
+        element: <DiscountProducts />,
         role: 'seller',
         status: 'active'
     },
     {
-        path: '/seller/dashboard/discount-products',
-        element: <DiscountProducts />,
+        path: '/seller/dashboard/edit-product/:productId',
+        element: <EditProduct />,
         role: 'seller',
         status: 'active'
     },
@@ -60,12 +61,12 @@ const sellerRoutes = [
         role: 'seller',
         visibility: ['active', 'deactive']
     },
-    // {
-    //     path: '/seller/dashboard/order/details/:orderId',
-    //     element: <OrderDetails />,
-    //     role: 'seller',
-    //     visibility: ['active', 'deactive']
-    // },
+    {
+        path: '/seller/dashboard/order/details/:orderId',
+        element: <OrderDetails />,
+        role: 'seller',
+        visibility: ['active', 'deactive']
+    },
     {
         path: '/seller/dashboard/payments',
         element: <Payments />,
@@ -73,13 +74,13 @@ const sellerRoutes = [
         status: 'active'
     },
     {
-        path: '/seller/dashboard/chat-customer/:customerId',
+        path: '/seller/dashboard/chat-customer',
         element: <ChatCustomer />,
         role: 'seller',
         status: 'active'
     },
     {
-        path: '/seller/dashboard/chat-customer',
+        path: '/seller/dashboard/chat-customer/:customerId',
         element: <ChatCustomer />,
         role: 'seller',
         status: 'active'

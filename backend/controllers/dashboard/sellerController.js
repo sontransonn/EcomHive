@@ -31,12 +31,86 @@ class sellerController {
 
     // Lấy ra các seller ở trạng thái active theo query
     static get_active_sellers_by_query = async (req, res) => {
+        try {
+            let { page, searchValue, parPage } = req.query
+            page = parseInt(page)
+            parPage = parseInt(parPage)
 
+            const skipPage = parPage * (page - 1)
+
+            if (searchValue) {
+                const sellers = await SELLERS.find({
+                    $text: { $search: searchValue },
+                    status: 'active'
+                }).skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+
+                const totalSeller = await sellerModel.find({
+                    $text: { $search: searchValue },
+                    status: 'active'
+                }).countDocuments()
+
+                return res.status(200).json({
+                    totalSeller,
+                    sellers
+                })
+            } else {
+                const sellers = await SELLERS.find({ status: 'active' })
+                    .skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+
+                const totalSeller = await SELLERS.find({ status: 'active' })
+                    .countDocuments()
+
+                return res.status(200).json({
+                    totalSeller,
+                    sellers
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
     }
 
     // Lấy ra các seller ở trạng thái deactive theo query
     static get_deactive_sellers_by_query = async (req, res) => {
+        try {
+            let { page, searchValue, parPage } = req.query
+            page = parseInt(page)
+            parPage = parseInt(parPage)
 
+            const skipPage = parPage * (page - 1)
+
+            if (searchValue) {
+                const sellers = await SELLERS.find({
+                    $text: { $search: searchValue },
+                    status: 'deactive'
+                }).skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+
+                const totalSeller = await SELLERS.find({
+                    $text: { $search: searchValue },
+                    status: 'deactive'
+                }).countDocuments()
+
+                return res.status(200).json({
+                    totalSeller,
+                    sellers
+                })
+            } else {
+                const sellers = await SELLERS.find({ status: 'deactive' })
+                    .skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+
+                const totalSeller = await SELLERS.find({ status: 'deactive' })
+                    .countDocuments()
+
+                return res.status(200).json({
+                    totalSeller,
+                    sellers
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
     }
 
     // Lấy seller theo sellerId

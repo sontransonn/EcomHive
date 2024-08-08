@@ -1,26 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { jwtDecode } from "jwt-decode";
 import axios from 'axios'
+
+import { decodeToken } from '../../utils/tokenUtil';
 
 const api = axios.create({
     baseURL: 'http://localhost:8080/api/v1/auth'
 })
 
-const returnRole = (token) => {
-    if (token) {
-        const decodeToken = jwtDecode(token)
-        const expireTime = new Date(decodeToken.exp * 1000)
-        if (new Date() > expireTime) {
-            localStorage.removeItem('accessToken')
-            return ''
-        } else {
-            return decodeToken.role
-        }
-    } else {
-        return ''
-    }
+const initialState = {
+    successMessage: '',
+    errorMessage: '',
+    loader: false,
+    userInfo: '',
+    role: decodeToken(localStorage.getItem('accessToken')),
+    token: localStorage.getItem('accessToken')
 }
 
+// Đăng nhập với admin
 export const admin_login = createAsyncThunk(
     'auth/admin_login',
     async (info, { rejectWithValue, fulfillWithValue }) => {
@@ -35,6 +31,7 @@ export const admin_login = createAsyncThunk(
     }
 )
 
+// Đăng nhập với seller
 export const seller_login = createAsyncThunk(
     'auth/seller_login',
     async (info, { rejectWithValue, fulfillWithValue }) => {
@@ -49,12 +46,34 @@ export const seller_login = createAsyncThunk(
     }
 )
 
+// Đăng ký seller
 export const seller_register = createAsyncThunk(
     'auth/seller_register',
     async (info, { rejectWithValue, fulfillWithValue }) => {
         try {
             const { data } = await api.post('/seller-register', info, { withCredentials: true })
             localStorage.setItem('accessToken', data.token)
+
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
+// Đăng xuất
+export const logout = createAsyncThunk(
+    'auth/logout',
+    async ({ navigate, role }, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.get('/logout', { withCredentials: true })
+
+            localStorage.removeItem('accessToken')
+            if (role === 'admin') {
+                navigate('/admin/login')
+            } else {
+                navigate('/seller/login')
+            }
 
             return fulfillWithValue(data)
         } catch (error) {
@@ -104,14 +123,7 @@ export const profile_info_add = createAsyncThunk(
 
 export const authSlice = createSlice({
     name: 'auth',
-    initialState: {
-        successMessage: '',
-        errorMessage: '',
-        loader: false,
-        userInfo: '',
-        role: returnRole(localStorage.getItem('accessToken')),
-        token: localStorage.getItem('accessToken')
-    },
+    initialState,
     reducers: {
         messageClear: (state, _) => {
             state.errorMessage = ""
@@ -131,7 +143,7 @@ export const authSlice = createSlice({
                 state.loader = false
                 state.successMessage = action.payload.message
                 state.token = action.payload.token
-                state.role = returnRole(action.payload.token)
+                state.role = decodeToken(action.payload.token)
             })
             .addCase(seller_login.pending, (state, action) => {
                 state.loader = true
@@ -144,7 +156,7 @@ export const authSlice = createSlice({
                 state.loader = false
                 state.successMessage = action.payload.message
                 state.token = action.payload.token
-                state.role = returnRole(action.payload.token)
+                state.role = decodeToken(action.payload.token)
             })
             .addCase(seller_register.pending, (state, action) => {
                 state.loader = true
@@ -157,7 +169,7 @@ export const authSlice = createSlice({
                 state.loader = false
                 state.successMessage = action.payload.message
                 state.token = action.payload.token
-                state.role = returnRole(action.payload.token)
+                state.role = decodeToken(action.payload.token)
             })
             .addCase(get_user_info.fulfilled, (state, action) => {
                 state.loader = false

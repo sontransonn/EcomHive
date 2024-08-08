@@ -5,7 +5,7 @@ import { CiChat1 } from 'react-icons/ci'
 import { BsCurrencyDollar, BsChat } from 'react-icons/bs'
 import { RiProductHuntLine } from 'react-icons/ri'
 
-export const allNav = [
+const navItems = [
     {
         id: 1,
         title: 'Dashboard',
@@ -15,7 +15,7 @@ export const allNav = [
     },
     {
         id: 2,
-        title: 'Orders',
+        title: 'All Orders',
         icon: <AiOutlineShoppingCart />,
         role: 'admin',
         path: '/admin/dashboard/orders'
@@ -29,17 +29,10 @@ export const allNav = [
     },
     {
         id: 4,
-        title: 'Sellers',
+        title: 'Active Sellers',
         icon: <FiUsers />,
         role: 'admin',
         path: '/admin/dashboard/sellers'
-    },
-    {
-        id: 5,
-        title: 'Payment request',
-        icon: <BsCurrencyDollar />,
-        role: 'admin',
-        path: '/admin/dashboard/payment-request'
     },
     {
         id: 6,
@@ -50,14 +43,21 @@ export const allNav = [
     },
     {
         id: 7,
-        title: 'Sellers Request',
+        title: 'Pending Sellers',
         icon: <BiLoaderCircle />,
         role: 'admin',
         path: '/admin/dashboard/sellers-request'
     },
     {
+        id: 5,
+        title: 'Payment request',
+        icon: <BsCurrencyDollar />,
+        role: 'admin',
+        path: '/admin/dashboard/payment-request'
+    },
+    {
         id: 8,
-        title: 'Chat Seller',
+        title: 'Chat With Seller',
         icon: <CiChat1 />,
         role: 'admin',
         path: '/admin/dashboard/chat-sellers'
@@ -78,29 +78,28 @@ export const allNav = [
     },
     {
         id: 11,
-        title: 'All Product',
+        title: 'All Products',
         icon: <RiProductHuntLine />,
         role: 'seller',
         path: '/seller/dashboard/products'
     },
     {
         id: 11,
-        title: 'All Banner',
+        title: 'All Banners',
         icon: <RiProductHuntLine />,
         role: 'seller',
         path: '/seller/dashboard/banners'
     },
-
     {
         id: 12,
-        title: 'Discount Product',
+        title: 'Discount Products',
         icon: <RiProductHuntLine />,
         role: 'seller',
         path: '/seller/dashboard/discount-products'
     },
     {
         id: 13,
-        title: 'Orders',
+        title: 'All Orders',
         icon: <AiOutlineShoppingCart />,
         role: 'seller',
         path: '/seller/dashboard/orders'
@@ -114,23 +113,25 @@ export const allNav = [
     },
     {
         id: 15,
-        title: 'Chat Customer',
+        title: 'Chat With Customer',
         icon: <BsChat />,
         role: 'seller',
         path: '/seller/dashboard/chat-customer'
     },
     {
         id: 16,
-        title: 'Chat Support',
+        title: 'Chat With Admin',
         icon: <CiChat1 />,
         role: 'seller',
         path: '/seller/dashboard/chat-support'
     },
     {
         id: 17,
-        title: 'Profile',
+        title: 'Seller Profile',
         icon: <FiUsers />,
         role: 'seller',
         path: '/seller/dashboard/profile'
     },
 ]
+
+export default navItems

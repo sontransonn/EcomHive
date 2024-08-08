@@ -16,9 +16,9 @@ import socket from '../socket'
 const MainLayout = () => {
     const dispatch = useDispatch()
 
-    const [showSidebar, setShowSidebar] = useState(false)
-
     const { userInfo } = useSelector(state => state.auth)
+
+    const [showSidebar, setShowSidebar] = useState(false)
 
     useEffect(() => {
         if (userInfo && userInfo.role === 'seller') {

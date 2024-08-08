@@ -6,6 +6,15 @@ const api = axios.create({
     withCredentials: true
 })
 
+const initialState = {
+    successMessage: '',
+    errorMessage: '',
+    loader: false,
+    products: [],
+    product: '',
+    totalProduct: 0
+}
+
 // Thêm product (Seller)
 export const add_product = createAsyncThunk(
     'product/add_product',
@@ -84,14 +93,7 @@ export const update_product_image_by_productId = createAsyncThunk(
 
 export const productSlice = createSlice({
     name: 'product',
-    initialState: {
-        successMessage: '',
-        errorMessage: '',
-        loader: false,
-        products: [],
-        product: '',
-        totalProduct: 0
-    },
+    initialState,
     reducers: {
         messageClear: (state, _) => {
             state.errorMessage = ""

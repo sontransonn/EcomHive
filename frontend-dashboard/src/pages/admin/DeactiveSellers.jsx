@@ -1,4 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import {
+    get_deactive_sellers_by_query
+} from "../../redux/slices/sellerSlice"
 
 import { FaEye } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
@@ -6,10 +11,23 @@ import { Link } from 'react-router-dom'
 import Pagination from "../../components/Pagination"
 
 const DeactiveSellers = () => {
+    const dispatch = useDispatch()
+
+    const { sellers, totalSellers } = useSelector(state => state.seller)
+
     const [currentPage, setCurrentPage] = useState(1)
     const [searchValue, setSearchValue] = useState('')
     const [parPage, setParPage] = useState(5)
     const [show, setShow] = useState(false)
+
+    useEffect(() => {
+        const obj = {
+            parPage: parseInt(parPage),
+            page: parseInt(currentPage),
+            searchValue
+        }
+        dispatch(get_deactive_sellers_by_query(obj))
+    }, [searchValue, currentPage, parPage])
 
     return (
         <div className='px-2 lg:px-7 pt-5'>
@@ -20,13 +38,8 @@ const DeactiveSellers = () => {
                         <option value="5">15</option>
                         <option value="5">25</option>
                     </select>
-                    <input
-                        onChange={e => setSearchValue(e.target.value)}
-                        value={searchValue} className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]'
-                        type="text" placeholder='search'
-                    />
+                    <input onChange={e => setSearchValue(e.target.value)} value={searchValue} className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]' type="text" placeholder='search' />
                 </div>
-
                 <div className='relative overflow-x-auto'>
                     <table className='w-full text-sm text-left text-[#d0d2d6]'>
                         <thead className='text-xs text-[#d0d2d6] uppercase border-b border-slate-700'>
@@ -42,8 +55,7 @@ const DeactiveSellers = () => {
                                 <th scope='col' className='py-3 px-4'>Action</th>
                             </tr>
                         </thead>
-
-                        {/* <tbody className='text-sm font-normal'>
+                        <tbody className='text-sm font-normal'>
                             {
                                 sellers.map((d, i) => <tr key={i}>
                                     <td scope='row' className='py-1 px-4 font-medium whitespace-nowrap'>{i + 1}</td>
@@ -75,11 +87,10 @@ const DeactiveSellers = () => {
                                     </td>
                                 </tr>)
                             }
-                        </tbody> */}
+                        </tbody>
                     </table>
                 </div>
-
-                {/* {
+                {
                     totalSellers <= parPage ? <div className='w-full flex justify-end mt-4 bottom-4 right-4'>
                         <Pagination
                             pageNumber={currentPage}
@@ -89,7 +100,7 @@ const DeactiveSellers = () => {
                             showItem={4}
                         />
                     </div> : ""
-                } */}
+                }
             </div>
         </div>
     )

@@ -250,6 +250,23 @@ class authController {
         }
     }
 
+    // Đăng xuất
+    static logout = async (req, res) => {
+        try {
+            res.cookie('accessToken', null, {
+                expires: new Date(Date.now()),
+                httpOnly: true
+            })
+
+            return res.status(200).json({
+                message: 'logout success'
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
+
     static profile_image_upload = async (req, res) => {
         try {
             const { id } = req

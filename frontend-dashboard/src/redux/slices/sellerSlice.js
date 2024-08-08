@@ -6,6 +6,7 @@ const api = axios.create({
     withCredentials: true
 })
 
+// Lấy ra các seller ở trạng thái pending theo query
 export const get_pending_sellers_by_query = createAsyncThunk(
     'seller/get_pending_sellers_by_query',
     async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
@@ -19,6 +20,7 @@ export const get_pending_sellers_by_query = createAsyncThunk(
     }
 )
 
+// Lấy ra các seller ở trạng thái active theo query
 export const get_active_sellers_by_query = createAsyncThunk(
     'seller/get_active_sellers_by_query',
     async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
@@ -32,6 +34,7 @@ export const get_active_sellers_by_query = createAsyncThunk(
     }
 )
 
+// Lấy ra các seller ở trạng thái deactive theo query
 export const get_deactive_sellers_by_query = createAsyncThunk(
     'seller/get_deactive_sellers_by_query',
     async ({ parPage, page, searchValue }, { rejectWithValue, fulfillWithValue }) => {
@@ -45,6 +48,7 @@ export const get_deactive_sellers_by_query = createAsyncThunk(
     }
 )
 
+// Lấy seller theo sellerId
 export const get_seller_by_sellerId = createAsyncThunk(
     'seller/get_seller_by_sellerId',
     async (sellerId, { rejectWithValue, fulfillWithValue }) => {
@@ -58,6 +62,7 @@ export const get_seller_by_sellerId = createAsyncThunk(
     }
 )
 
+// Update trạng thái seller theo sellerId
 export const update_status_seller_by_sellerId = createAsyncThunk(
     'seller/update_status_seller_by_sellerId',
     async (info, { rejectWithValue, fulfillWithValue }) => {
@@ -123,7 +128,8 @@ export const sellerSlice = createSlice({
                 state.totalSeller = action.payload.totalSeller
             })
             .addCase(get_deactive_sellers_by_query.fulfilled, (state, action) => {
-
+                state.sellers = action.payload.sellers
+                state.totalSeller = action.payload.totalSeller
             })
             .addCase(get_seller_by_sellerId.fulfilled, (state, action) => {
                 state.seller = action.payload.seller

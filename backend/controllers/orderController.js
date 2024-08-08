@@ -6,6 +6,146 @@ import CUSTOMERORDERS from "../models/customerOrders.js"
 import CARTS from "../models/cartsModel.js"
 
 class orderController {
+    // Lấy ra các đơn hàng theo query ở phía admin
+    static get_admin_orders = async (req, res) => {
+        try {
+            let { page, parPage, searchValue } = req.query
+            page = parseInt(page)
+            parPage = parseInt(parPage)
+
+            const skipPage = parPage * (page - 1)
+
+            if (searchValue) {
+
+            } else {
+                const orders = await CUSTOMERORDERS.aggregate([
+                    {
+                        $lookup: {
+                            from: 'authorrders',
+                            localField: "_id",
+                            foreignField: 'orderId',
+                            as: 'suborder'
+                        }
+                    }
+                ]).skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+
+                const totalOrder = await CUSTOMERORDERS.aggregate([
+                    {
+                        $lookup: {
+                            from: 'authororders',
+                            localField: "_id",
+                            foreignField: 'orderId',
+                            as: 'suborder'
+                        }
+                    }
+                ])
+
+                return res.status(200).json({
+                    orders,
+                    totalOrder: totalOrder.length
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
+
+    // Lấy ra chi tiết đơn hàng theo orderId ở phía admin
+    static get_admin_order = async (req, res) => {
+        try {
+            const { orderId } = req.params
+
+            const order = await CUSTOMERORDERS.aggregate([
+                {
+                    $match: { _id: new mongoose.Types.ObjectId(orderId) }
+                }, {
+                    $lookup: {
+                        from: 'authororders',
+                        localField: '_id',
+                        foreignField: 'orderId',
+                        as: 'suborder'
+                    }
+                }
+            ])
+
+            return res.status(200).json({
+                order: order[0]
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
+
+    // Cập nhật status của order ở phía admin
+    static admin_order_status_update = async (req, res) => {
+        try {
+            const { orderId } = req.params
+            const { status } = req.body
+
+            await CUSTOMERORDERS.findByIdAndUpdate(orderId, {
+                delivery_status: status
+            })
+
+            return res.status(200).json({
+                message: 'order status change success'
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
+
+    // Lấy ra các đơn hàng theo query ở phía seller
+    static get_seller_orders = async (req, res) => {
+        try {
+            const { sellerId } = req.params
+
+            let { page, parPage, searchValue } = req.query
+            page = parseInt(page)
+            parPage = parseInt(parPage)
+
+            const skipPage = parPage * (page - 1)
+
+            if (searchValue) {
+
+            } else {
+                const orders = await AUTHORORDERS.find({
+                    sellerId,
+                }).skip(skipPage).limit(parPage).sort({ createdAt: -1 })
+
+                const totalOrder = await AUTHORORDERS.find({
+                    sellerId,
+                }).countDocuments()
+
+                return res.status(200).json({
+                    orders,
+                    totalOrder
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
+
+    // Lấy ra chi tiết đơn hàng theo orderId ở phía seller
+    static get_seller_order = async (req, res) => {
+        try {
+            const { orderId } = req.params
+
+            const order = await AUTHORORDERS.findById(orderId)
+
+            return res.status(200).json({
+                order
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
+
     static paymentCheck = async (id) => {
         try {
             const order = await CUSTOMERORDERS.findById(id)
@@ -21,7 +161,8 @@ class orderController {
             }
             return true
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            res.status(500).json({ error: error })
         }
     }
 

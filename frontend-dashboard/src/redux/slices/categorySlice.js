@@ -6,6 +6,14 @@ const api = axios.create({
     withCredentials: true
 })
 
+const initialState = {
+    successMessage: '',
+    errorMessage: '',
+    loader: false,
+    categories: [],
+    totalCategory: 0
+}
+
 // Lấy ra các category theo truy vấn
 export const get_categories_by_query = createAsyncThunk(
     'category/get_categories_by_query',
@@ -42,13 +50,7 @@ export const add_category = createAsyncThunk(
 
 export const categorySlice = createSlice({
     name: 'category',
-    initialState: {
-        successMessage: '',
-        errorMessage: '',
-        loader: false,
-        categories: [],
-        totalCategory: 0
-    },
+    initialState,
     reducers: {
         messageClear: (state, _) => {
             state.errorMessage = ""

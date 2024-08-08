@@ -8,20 +8,19 @@ import {
 
 import Router from './router/Router'
 
-import publicRoutes from "./router/routes/publicRoutes"
-import { getRoutes } from './router/routes'
+import routeHelper from './router/helpers/routeHelper'
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const [allRoutes, setAllRoutes] = useState([...publicRoutes])
-
   const { token } = useSelector(state => state.auth)
 
-  useEffect(() => {
-    const routes = getRoutes()
+  const [allRoutes, setAllRoutes] = useState([])
 
-    setAllRoutes([...allRoutes, routes])
+  useEffect(() => {
+    const allRoutes = routeHelper.getAllRoutes()
+
+    setAllRoutes([...allRoutes])
   }, [])
 
   useEffect(() => {

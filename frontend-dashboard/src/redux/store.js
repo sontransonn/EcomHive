@@ -6,6 +6,7 @@ import productReducer from './slices/productSlice'
 import sellerReducer from './slices/sellerSlice'
 import chatReducer from './slices/chatSlice'
 import orderReducer from './slices/orderSlice'
+import paymentReducer from './slices/paymentSlice'
 
 const store = configureStore({
     reducer: {
@@ -14,7 +15,8 @@ const store = configureStore({
         product: productReducer,
         seller: sellerReducer,
         chat: chatReducer,
-        order: orderReducer
+        order: orderReducer,
+        payment: paymentReducer
     },
     middleware: getDefaultMiddleware => {
         return getDefaultMiddleware({

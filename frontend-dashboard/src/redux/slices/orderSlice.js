@@ -41,6 +41,19 @@ export const get_admin_order = createAsyncThunk(
     }
 )
 
+// Cập nhật status của order ở phía admin
+export const admin_order_status_update = createAsyncThunk(
+    'order/admin_order_status_update',
+    async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
+        try {
+            const { data } = await api.put(`/admin/order-status/update/${orderId}`, info, { withCredentials: true })
+            return fulfillWithValue(data)
+        } catch (error) {
+            return rejectWithValue(error.response.data)
+        }
+    }
+)
+
 // Lấy ra các đơn hàng theo query ở phía seller
 export const get_seller_orders = createAsyncThunk(
     'order/get_seller_orders',
@@ -67,19 +80,7 @@ export const get_seller_order = createAsyncThunk(
     }
 )
 
-// Cập nhật status của order ở phía admin
-export const admin_order_status_update = createAsyncThunk(
-    'order/admin_order_status_update',
-    async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
-        try {
-            const { data } = await api.put(`/admin/order-status/update/${orderId}`, info, { withCredentials: true })
-            return fulfillWithValue(data)
-        } catch (error) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
+// Cập nhật status của order ở phía seller
 export const seller_order_status_update = createAsyncThunk(
     'order/seller_order_status_update',
     async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {

@@ -8,6 +8,7 @@ import corsConfig from './configs/corsConfig.js';
 import authRoutes from "./routes/authRoute.js"
 import orderRoute from "./routes/orderRoute.js"
 import chatRoute from "./routes/chatRoute.js"
+import paymentRoute from "./routes/paymentRoute.js"
 
 import ClientCategoryRoute from "./routes/client/categoryRoute.js"
 import ClientProductRoute from "./routes/client/productRoute.js"
@@ -28,15 +29,16 @@ app.use(cookieParser())
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/order", orderRoute)
 app.use("/api/v1/chat", chatRoute)
+app.use("/api/v1/payment", paymentRoute)
 
-// -----ClientRoute
+// -----clientRoute
 app.use('/api/v1/client', ClientCategoryRoute)
 app.use('/api/v1/client', ClientProductRoute)
 app.use('/api/v1/client', ClientReviewRoute)
 app.use('/api/v1/client', ClientCartRoute)
 app.use('/api/v1/client', ClientWishlistRoute)
 
-// -----DashboardRoute
+// -----dashboardRoute
 app.use("/api/v1/dashboard", DashboardCategoryRoute)
 app.use("/api/v1/dashboard", DashboardProductRoute)
 app.use("/api/v1/dashboard", DashboardSellerRoute)

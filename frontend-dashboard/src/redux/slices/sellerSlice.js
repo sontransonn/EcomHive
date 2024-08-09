@@ -76,31 +76,6 @@ export const update_status_seller_by_sellerId = createAsyncThunk(
     }
 )
 
-export const create_stripe_connect_account = createAsyncThunk(
-    'seller/create_stripe_connect_account',
-    async () => {
-        try {
-            const { data: { url } } = await api.get(`/payment/create-stripe-connect-account`)
-            window.location.href = url
-            // return fulfillWithValue(data)
-        } catch (error) {
-            //return rejectWithValue(error.response.data)
-        }
-    }
-)
-
-export const active_stripe_connect_account = createAsyncThunk(
-    'seller/active_stripe_connect_account',
-    async (activeCode, { rejectWithValue, fulfillWithValue }) => {
-        try {
-            const { data } = await api.put(`/payment/active-stripe-connect-account/${activeCode}`, {})
-            return fulfillWithValue(data)
-        } catch (error) {
-            return rejectWithValue(error.response.data)
-        }
-    }
-)
-
 export const sellerSlice = createSlice({
     name: 'seller',
     initialState: {
@@ -136,17 +111,6 @@ export const sellerSlice = createSlice({
             })
             .addCase(update_status_seller_by_sellerId.fulfilled, (state, action) => {
                 state.seller = action.payload.seller
-                state.successMessage = action.payload.message
-            })
-            .addCase(active_stripe_connect_account.pending, (state, action) => {
-                state.loader = true
-            })
-            .addCase(active_stripe_connect_account.rejected, (state, action) => {
-                state.loader = false
-                state.errorMessage = action.payload.message
-            })
-            .addCase(active_stripe_connect_account.fulfilled, (state, action) => {
-                state.loader = false
                 state.successMessage = action.payload.message
             })
     }

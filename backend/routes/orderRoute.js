@@ -14,7 +14,7 @@ router.put('/admin/order-status/update/:orderId', orderController.admin_order_st
 router.get('/seller/orders/:sellerId', orderController.get_seller_orders)
 router.get('/seller/order/:orderId', orderController.get_seller_order)
 
-// router.put('/seller/order-status/update/:orderId', orderController.seller_order_status_update)
+router.put('/seller/order-status/update/:orderId', orderController.seller_order_status_update)
 
 // -----customer
 router.get('/customer/confirm/:orderId', orderController.order_confirm)

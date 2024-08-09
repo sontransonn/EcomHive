@@ -21,7 +21,7 @@ class orderController {
                 const orders = await CUSTOMERORDERS.aggregate([
                     {
                         $lookup: {
-                            from: 'authorrders',
+                            from: 'authororders',
                             localField: "_id",
                             foreignField: 'orderId',
                             as: 'suborder'
@@ -39,7 +39,7 @@ class orderController {
                         }
                     }
                 ])
-
+                console.log(orders);
                 return res.status(200).json({
                     orders,
                     totalOrder: totalOrder.length
@@ -139,6 +139,25 @@ class orderController {
 
             return res.status(200).json({
                 order
+            })
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error })
+        }
+    }
+
+    // Cập nhật status của order ở phía seller
+    static seller_order_status_update = async (req, res) => {
+        try {
+            const { orderId } = req.params
+            const { status } = req.body
+
+            await AUTHORORDERS.findByIdAndUpdate(orderId, {
+                delivery_status: status
+            })
+
+            return res.status(200).json({
+                message: 'order status change success'
             })
         } catch (error) {
             console.log(error);

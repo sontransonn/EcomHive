@@ -13,8 +13,9 @@ import ProductDetails from './pages/product-details/ProductDetails';
 import Cart from './pages/cart/Cart';
 import Shipping from './pages/shipping/Shipping';
 import Payment from './pages/payment/Payment';
-import RegisterPage from './pages/register/RegisterPage'
-import LoginPage from './pages/login/LoginPage'
+import RegisterPage from './pages/auth/RegisterPage'
+import LoginPage from './pages/auth/LoginPage'
+
 import ProtectUser from './components/ProtectUser';
 import ClientDashboard from './pages/dashboard/ClientDashboard';
 import Index from './pages/dashboard/Index';
@@ -32,7 +33,7 @@ const App = () => {
   }, [])
 
   return (
-    <>
+    <div className='bg-[#ececec]'>
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/shop' element={<ShopPage />} />
@@ -58,7 +59,7 @@ const App = () => {
         </Route>
       </Routes>
       <Toaster position='top-right' />
-    </>
+    </div>
   )
 }
 

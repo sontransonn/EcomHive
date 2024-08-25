@@ -49,7 +49,7 @@ export const add_product_to_cart = createAsyncThunk(
 // Tăng số lượng sản phẩm
 export const quantity_inc = createAsyncThunk(
     'cart/quantity_inc',
-    async (card_id, { rejectWithValue, }) => {
+    async (card_id, { rejectWithValue, fulfillWithValue }) => {
         try {
             const { data } = await api.put(`/quantity-inc/${card_id}`)
 

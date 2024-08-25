@@ -12,12 +12,12 @@ const Footer = () => {
                     <div className='flex flex-col gap-3'>
                         <img
                             className='w-[190px] h-[70x]'
-                            src="http://localhost:5173/images/logo.png"
+                            src="http://localhost:3000/images/logo.png"
                             alt="logo"
                         />
                         <ul className='flex flex-col gap-2 text-slate-300'>
-                            <li>Address: Hà Nội</li>
-                            <li>Phone: +84 0866509926</li>
+                            <li>Địa chỉ: Hà Nội</li>
+                            <li>Số điện thoại: +84 0866509926 (VN)</li>
                             <li>Email: sontransonn@gmail.com</li>
                         </ul>
                     </div>

@@ -1,16 +1,16 @@
 import React from 'react'
 
-import MainHeader from './components/MainHeader'
+import AuthHeader from './components/AuthHeader'
 import Footer from './components/Footer'
 
-const MainLayout = ({ children }) => {
+const AuthLayout = ({ auth, children }) => {
     return (
         <div className='w-full flex flex-col'>
-            <MainHeader />
+            <AuthHeader auth={auth} />
             {children}
             <Footer />
         </div>
     )
 }
 
-export default MainLayout
+export default AuthLayout

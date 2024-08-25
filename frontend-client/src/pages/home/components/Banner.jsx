@@ -58,7 +58,7 @@ const CustomRightArrow = ({ onClick }) => {
 
 const Banner = () => {
     return (
-        <div className='w-full md-lg:mt-6'>
+        <div className='w-full md-lg:mt-6 mt-8'>
             <div className='w-[85%] lg:w-[90%] mx-auto'>
                 <div className='w-full flex flex-wrap md-lg:gap-8'>
                     <div className='w-full'>
